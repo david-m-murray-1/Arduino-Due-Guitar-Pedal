@@ -1,10 +1,12 @@
-// TODO: make interrupts for pots on change.
-  // soln 1: connect pot to digital and analog pins simultaneously
-  //         a digital interrupt will trigger on changea and a 
-  //         the analog input will read the value it holds.
 #include <HiFi.h>
+#include <delay.h>
+#include <distortion.h>
+#include <effect.h>
+#include <ringModulator.h>
+#include <ssc.h>
 
 #define MAX_DELAY 40000
+
 void TC4_Handler();
 void codecTxReadyInterrupt(HiFiChannelID_t);
 void codecRxReadyInterrupt(HiFiChannelID_t);
@@ -12,7 +14,11 @@ void ADC1_ISR();      // adc_channel 7
 void ADC2_ISR();
 void ADC3_ISR();
 void ADC4_ISR();
-void Distortion_Process_Samples(float *inputbuffer);
+void Distortion_process_samples(float *inputbuffer);
+void ECHO_process_samples(float *inputbuffer);
+void DELAY_process_samples(float *inputbuffer);
+void TREMOLO_process_samples(float *inputbuffer);
+
 static uint32_t ldat = 0;
 static uint32_t rdat = 0;
 
@@ -54,7 +60,6 @@ void setup() {
   pinMode(LED2, OUTPUT);
   pinMode(LED3, OUTPUT);
 
-
   HiFi.begin();
 
   // Configure transmitter for 2 channels, external TK/TF clocks, 32 bit per
@@ -65,10 +70,6 @@ void setup() {
   // Same config as above, except sync the receiver to transmitter (RK/RF
   // clock signals not needed)
   HiFi.configureRx(HIFI_AUDIO_MODE_STEREO, HIFI_CLK_MODE_USE_TK_RK_CLK, 32);
-
-  // Since we've decided to sync the receiver to the transmitter, we could 
-  // handle both reading and writing in a single interrupt (receive or 
-  // transmit).  This example uses both just for demonstration purposes.
   HiFi.onTxReady(codecTxReadyInterrupt);
   HiFi.onRxReady(codecRxReadyInterrupt);
 
@@ -111,8 +112,8 @@ void loop() {
 
   switch (EFFECT){
     case DISTORTION:
-      left_out = Distortion_Process_Samples(*left_in);
-      right_out = Distortion_Process_Samples(*right_in);
+      left_out = DISTORTION_Process_Samples(*left_in);
+      right_out = DISTORTION_Process_Samples(*right_in);
       
       //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
       left_out=map(left_out,0,16777215,1,POT1);
@@ -131,7 +132,7 @@ void loop() {
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
       
-    case REVERB:
+    case DELAY:
 
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
@@ -230,46 +231,6 @@ void TC4_Handler()
   left_out=map(left_in,0,16777215,1,POT1);
   right_out=map(right_in,0,16777215‬,1,POT1);
 }
-
-// set the timbre with a potentiometer
-void Distortion_Process_Samples(float *inputbuffer){
-  timbreInverse = (1 - (timbre * 0.099)) * 10; //inverse scaling from timbre
-  for(int bufptr=0; bufptr<FRAMESPERBUFFER; bufptr++) {
-    inputbuffer[bufptr] = inputbuffer[bufptr] * depth;                               
-    inputbuffer[bufptr] = tanh((inputbuffer[bufptr] * (timbre + 1)));                
-    inputbuffer[bufptr] = (inputbuffer[bufptr] * ((0.1 + timbre) * timbreInverse));  
-    inputbuffer[bufptr] = cos((inputbuffer[bufptr] + (timbre + 0.25)));              
-    inputbuffer[bufptr] = tanh(inputbuffer[bufptr] * (timbre + 1));                  
-    inputbuffer[bufptr] = inputbuffer[bufptr] * 0.125;  
-
-    outputbuffer[bufptr] = inputbuffer[bufptr];
-    return outputbuffer;
-    }
-}
-
-void ECHO_Process_Samples(float *inputbuffer){
-
-  
-  outputbuffer[bufptr] = inputbuffer[bufptr];
-  return outputbuffer;
-}
-
-void REVERB_Samples(float *inputbuffer){
-
-  
-  outputbuffer[bufptr] = inputbuffer[bufptr];
-
-  
-  return outputbuffer;
-}
-
-void TREMOLO_Process_Samples(float *inputbuffer){
-
-  
-  outputbuffer[bufptr] = inputbuffer[bufptr];
-  return outputbuffer;
-}
-
    /*
       // DISTORTION parameters
       upper_threshold=map(POT4,0,16777215,POT3,8388608);
