@@ -21,6 +21,11 @@ void REVERB_process_samples(float *inputbuffer);
 void DELAY_process_samples(float *inputbuffer);
 void TREMOLO_process_samples(float *inputbuffer);
 
+int DISTORTION_pin = ;
+int DELAY_pin = ;
+int REVERB_pin = ;
+int TREMOLO_pin = ;
+
 static uint32_t ldat = 0;
 static uint32_t rdat = 0;
 
