@@ -21,11 +21,6 @@ void REVERB_process_samples(float *inputbuffer);
 void DELAY_process_samples(float *inputbuffer);
 void TREMOLO_process_samples(float *inputbuffer);
 
-int DISTORTION_pin = ;
-int DELAY_pin = ;
-int REVERB_pin = ;
-int TREMOLO_pin = ;
-
 static uint32_t ldat = 0;
 static uint32_t rdat = 0;
 
@@ -116,30 +111,33 @@ void loop() {
       //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
       left_out=map(left_out,0,16777215,1,POT1);
       right_out=map(right_out,0,16777215‬,1,POT1);
-
       break;
       
-    case DELAY:    
+    case DELAY: 
+      left_out = DELAY_process_pamples(*left_in);
+      right_out = DELAY_process_samples(*right_in);
+      
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
-
       break;
       
     case REVERB:
-
+      left_out = REVERB_process_pamples(*left_in);
+      right_out = REVERB_process_samples(*right_in);
+      
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
-
       break;
       
     case TREMOLO:
-
+      left_out = TREMOLO_process_pamples(*left_in);
+      right_out = TREMOLO_process_samples(*right_in);
+      
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
-
       break;
   }
 }
@@ -229,3 +227,5 @@ void TC4_Handler()
   left_out=map(left_in,0,16777215,1,POT1);
   right_out=map(right_in,0,16777215‬,1,POT1);
 }
+
+ 
