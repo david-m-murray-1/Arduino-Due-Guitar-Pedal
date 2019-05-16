@@ -10,14 +10,12 @@
 void TC4_Handler();
 void codecTxReadyInterrupt(HiFiChannelID_t);
 void codecRxReadyInterrupt(HiFiChannelID_t);
-void ADC1_ISR();      // adc_channel 7
-void ADC2_ISR();
-void ADC3_ISR();
-void ADC4_ISR();
 void Distortion_process_samples(float *inputbuffer);
 void REVERB_process_samples(float *inputbuffer);
 void DELAY_process_samples(float *inputbuffer);
 void TREMOLO_process_samples(float *inputbuffer);
+
+volatile char EFFECT;
 
 static uint32_t ldat = 0;
 static uint32_t rdat = 0;
@@ -89,14 +87,10 @@ void setup() {
 
   ///////////////////////     ADC POTENTIOMETERS      //////////////////
   //ADC Configuration
-  ADC->ADC_CR=2;         // Starts ADC conversion.
-  ADC->ADC_CHER= 0x00C3;  // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
-
-  ADC_SEQR1 = (7<<0) | (7<<4) |(6<<24) |(6<<28); //=0x66000077
-
-  // Enable ADCs as interrupts
-  ADC->ADC_IER = 0x00F0;  // enable channels 4-7 as interrupts
-}
+  ADC->ADC_MR |= 0x80;
+  ADC->ADC_CR= 0x02;         // Starts ADC conversion.
+  ADC->ADC_CHER= 0xF0;  // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
+  
 void loop() {
   POT0=ADC->ADC_CDR[7];                // read data from ADC7        
   POT1=ADC->ADC_CDR[8];                // read data from ADC8   
