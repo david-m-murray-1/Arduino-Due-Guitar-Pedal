@@ -2,14 +2,12 @@
 #include <delay.h>
 #include <distortion.h>
 #include <effect.h>
-#include <ringModulator.h>
-#include <ssc.h>
 
 // Effect parameters
-#define MAX_DELAY 40000
+#define MAX_DELAY 20000
 
-uint16_t sDelayBuffer0[MAX_DELAY];
-uint16_t sDelayBuffer1[MAX_DELAY];
+uint32_t sDelayBuffer0[MAX_DELAY];
+uint32_t sDelayBuffer1[MAX_DELAY];
 unsigned int DelayCounter = 0;
 unsigned int Delay_Depth = MAX_DELAY;
 
