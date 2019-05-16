@@ -1,4 +1,5 @@
 # Arduino-Due-Guitar-Pedal
+https://d3uzseaevmutz1.cloudfront.net/pubs/proDatasheet/CS4271_F1.pdf
 
 Currently, I2S.ino is the 'main file'
 
