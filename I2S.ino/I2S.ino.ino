@@ -219,19 +219,4 @@ void TC4_Handler()
   right_out=map(right_in,0,16777215‬,1,POT1);
 }
 
-// DISTORTION ALGORITHM_2
-   /*
-      // DISTORTION parameters
-      upper_threshold=map(POT4,0,16777215,POT3,8388608);
-      lower_threshold=map(POT4,0,16777215,POT2,8388608);
-
-      // apply DISTORTION threshold
-      if(left_in>=upper_threshold) ldat=upper_threshold; 
-      else if(left_in<lower_threshold)  ldat=lower_threshold;
-        
-      if(right_in>=upper_threshold) right_in=upper_threshold;
-      else if(right_in<lower_threshold)  right_in=lower_threshold;   
-    */
-
-
  
