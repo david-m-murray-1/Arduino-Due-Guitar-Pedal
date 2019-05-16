@@ -5,7 +5,13 @@
 #include <ringModulator.h>
 #include <ssc.h>
 
+// Effect parameters
 #define MAX_DELAY 40000
+
+uint16_t sDelayBuffer0[MAX_DELAY];
+uint16_t sDelayBuffer1[MAX_DELAY];
+unsigned int DelayCounter = 0;
+unsigned int Delay_Depth = MAX_DELAY;
 
 void TC4_Handler();
 void codecTxReadyInterrupt(HiFiChannelID_t);
@@ -15,10 +21,10 @@ void REVERB_process_samples(float *inputbuffer);
 void DELAY_process_samples(float *inputbuffer);
 void TREMOLO_process_samples(float *inputbuffer);
 
-volatile char EFFECT;
-
 static uint32_t ldat = 0;
 static uint32_t rdat = 0;
+
+volatile char EFFECT;
 
 int POT0, POT1, POT2, POT3;
 int LED0 = 7;
@@ -28,7 +34,7 @@ int LED3 = 4;
 int LED_pwr = 3;
 
 void setup() {
-  //////////////////////////  SET UP TIMER: ECHO   ////////////////////
+  //////////////////////////  SET UP TIMER:  ////////////////////
   pmc_set_writeprotect(false);
   pmc_enable_periph_clk(ID_TC4);
  
@@ -46,18 +52,18 @@ void setup() {
   //(=(1*3)+1) for timer1 channel1 
   NVIC_EnableIRQ(TC4_IRQn);
  
-  ///////////////////////     I2S COMMUNICATION      //////////////////
   // set codec into reset
   pinMode(7, OUTPUT);
   digitalWrite(7, LOW);
   pinMode(LED_pwr, OUTPUT);
   digitalWrite(LED_pwr, HIGH);
-
+  
   pinMode(LED0, OUTPUT);
   pinMode(LED1, OUTPUT);
   pinMode(LED2, OUTPUT);
   pinMode(LED3, OUTPUT);
 
+  ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
 
   // Configure transmitter for 2 channels, external TK/TF clocks, 32 bit per
@@ -87,24 +93,26 @@ void setup() {
 
   ///////////////////////     ADC POTENTIOMETERS      //////////////////
   //ADC Configuration
-  ADC->ADC_MR |= 0x80;
-  ADC->ADC_CR= 0x02;         // Starts ADC conversion.
-  ADC->ADC_CHER= 0xF0;  // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
+  ADC->ADC_MR |= 0x80;       // adc: free running mode
+  ADC->ADC_CR= 0x02;         // start adc conversion
+  ADC->ADC_CHER= 0xF0;       // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
   
 void loop() {
-  POT0=ADC->ADC_CDR[7];                // read data from ADC7        
-  POT1=ADC->ADC_CDR[8];                // read data from ADC8   
-  POT2=ADC->ADC_CDR[9];                // read data from ADC9
-  POT3=ADC->ADC_CDR[10];                 // read data from ADC10  
+  POT0=ADC->ADC_CDR[7];      // read effect parameters from POTs        
+  POT1=ADC->ADC_CDR[6];                   
+  POT2=ADC->ADC_CDR[5];               
+  POT3=ADC->ADC_CDR[4];                  
 
   switch (EFFECT){
     case DISTORTION:
-      left_out = DISTORTION_Process_Samples(*left_in);
-      right_out = DISTORTION_Process_Samples(*right_in);
+      left_out = DISTORTION_process_pamples(*left_in);
+      right_out = DISTORTION_process_samples(*right_in);
       
       //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
       left_out=map(left_out,0,16777215,1,POT1);
       right_out=map(right_out,0,16777215‬,1,POT1);
+
+      break;
       
     case DELAY:
 //======================================================================================================//
@@ -118,18 +126,24 @@ void loop() {
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
+
+      break;
       
     case REVERB:
 
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
+
+      break;
       
     case TREMOLO:
 
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
+
+      break;
   }
 }
 
@@ -218,5 +232,3 @@ void TC4_Handler()
   left_out=map(left_in,0,16777215,1,POT1);
   right_out=map(right_in,0,16777215‬,1,POT1);
 }
-
- 
