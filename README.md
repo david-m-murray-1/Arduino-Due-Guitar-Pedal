@@ -10,7 +10,7 @@ I2S Comm. with codec.
 
 4 digital effects: Distortion, Delay, Tremolo, and Reverb.
 
-TODO: ADC_ISR handlers and ADC clock for changing effect parameters via potentiometers.
+COMPLETE: ADC_ISR handlers and ADC clock for changing effect parameters via potentiometers.
 
 TODO: Finish effects algorithms for Tremolo and Reverb.
 
