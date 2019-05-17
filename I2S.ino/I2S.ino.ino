@@ -3,14 +3,6 @@
 #include <distortion.h>
 #include <effect.h>
 
-// Effect parameters
-#define MAX_DELAY 20000
-
-uint32_t sDelayBuffer0[MAX_DELAY];
-uint32_t sDelayBuffer1[MAX_DELAY];
-unsigned int DelayCounter = 0;
-unsigned int Delay_Depth = MAX_DELAY;
-
 void TC4_Handler();
 void codecTxReadyInterrupt(HiFiChannelID_t);
 void codecRxReadyInterrupt(HiFiChannelID_t);
@@ -21,6 +13,8 @@ void TREMOLO_process_samples(float *inputbuffer);
 
 static uint32_t ldat = 0;
 static uint32_t rdat = 0;
+static uint32_t left_in = 0;
+static uint32_t right_in = 0;
 
 volatile char EFFECT;
 
@@ -105,7 +99,7 @@ void loop() {
   }
 }
 
-void codecTxReadyInterrupt(HiFiChannelID_t channel)
+void codecTxReadyInterrupt(HiFiChannelID_t channel,*left_in,*right_in,POT2)
 {
   switch (EFFECT){
     case DISTORTION:
