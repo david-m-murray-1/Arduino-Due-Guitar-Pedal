@@ -85,7 +85,7 @@ void setup() {
   ///////////////////////     EFFECT CHANGE INTERRUPTS      //////////////////
 
   attachInterrupt(DISTORTION_pin,switchTo_DISTORTION,LOW);
-  attachInterrupt(DELAY_pin,switchTo_ECHO,LOW);
+  attachInterrupt(RINGMODULATOR_pin,switchTo_ECHO,LOW);
   attachInterrupt(REVERB_pin,switchTo_REVERB,LOW);
   attachInterrupt(TREMOLO_pin,switchTo_TREMOLO,LOW);
 
@@ -101,6 +101,12 @@ void loop() {
   POT2=ADC->ADC_CDR[5];               
   POT3=ADC->ADC_CDR[4];                  
 
+
+  }
+}
+
+void codecTxReadyInterrupt(HiFiChannelID_t channel)
+{
   switch (EFFECT){
     case DISTORTION:
       left_out = DISTORTION_process_pamples(*left_in);
@@ -111,9 +117,9 @@ void loop() {
       right_out=map(right_out,0,16777215‬,1,POT1);
       break;
       
-    case DELAY: 
-      left_out = DELAY_process_pamples(*left_in);
-      right_out = DELAY_process_samples(*right_in);
+    case RINGMODULATOR: 
+      left_out = RING_MODULATOR_process_pamples(*left_in, POT2);
+      right_out = RING_MODULATOR_process_samples(*right_in, POT2);
       
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
@@ -137,11 +143,7 @@ void loop() {
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
       break;
-  }
-}
-
-void codecTxReadyInterrupt(HiFiChannelID_t channel)
-{
+      
   if (channel == HIFI_CHANNEL_ID_1)
   {
     // Left channel
