@@ -5,16 +5,16 @@
 #include <ringModulator.h>
 #include <ssc.h>
 
-#define LED1ON (PIOC -> PIO_SODR = PIO_PB24)
+#define LED1ON (PIOC -> PIO_SODR = PIO_PB24)        // set output data register SODR
 #define LED2ON (PIOC -> PIO_SODR = PIO_PB25)
-#define LED3ON (PIOC -> PIO_SODR = PIO_PB26)
+#define LED3ON (PIOC -> PIO_SODR = PIO_PB26)     
 #define LED4ON (PIOC -> PIO_SODR = PIO_PB28)
 #define LED5ON (PIOB -> PIO_SODR = PIO_PB25)
-#define LED1OFF (PIOC -> PIO_SODR = PIO_PB24)
-#define LED2OFF (PIOC -> PIO_SODR = PIO_PB25)
-#define LED3OFF (PIOC -> PIO_SODR = PIO_PB26)
-#define LED4OFF (PIOC -> PIO_SODR = PIO_PB28)
-#define LED5OFF (PIOB -> PIO_SODR = PIO_PB25)
+#define LED1OFF (PIOC -> PIO_CODR = PIO_PB24)       // clear output data register CODR
+#define LED2OFF (PIOC -> PIO_CODR = PIO_PB25)
+#define LED3OFF (PIOC -> PIO_CODR = PIO_PB26)
+#define LED4OFF (PIOC -> PIO_CODR = PIO_PB28)
+#define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
 
 void TC4_Handler();
 void codecTxReadyInterrupt(HiFiChannelID_t);
