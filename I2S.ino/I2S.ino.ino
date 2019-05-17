@@ -101,42 +101,7 @@ void loop() {
 
 void codecTxReadyInterrupt(HiFiChannelID_t channel,*left_in,*right_in,POT2)
 {
-  switch (EFFECT){
-    case DISTORTION:
-      left_out = DISTORTION_process_pamples(*left_in);
-      right_out = DISTORTION_process_samples(*right_in);
-      
-      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
-      left_out=map(left_out,0,16777215,1,POT1);
-      right_out=map(right_out,0,16777215‬,1,POT1);
-      break;
-      
-    case RINGMODULATOR: 
-      left_out = RING_MODULATOR_process_pamples(*left_in, POT2);
-      right_out = RING_MODULATOR_process_samples(*right_in, POT2);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-      
-    case REVERB:
-      left_out = REVERB_process_pamples(*left_in);
-      right_out = REVERB_process_samples(*right_in);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-      
-    case TREMOLO:
-      left_out = TREMOLO_process_pamples(*left_in);
-      right_out = TREMOLO_process_samples(*right_in);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
+  
       
   if (channel == HIFI_CHANNEL_ID_1)
   {
@@ -203,8 +168,46 @@ void switchTo_TREMOLO{
 //Interrupt at 44.1KHz rate (every 22.6us)
 void TC4_Handler()
 {
+TC_GetStatus(TC1, 1);
+switch (EFFECT){
+    case DISTORTION:
+      left_out = DISTORTION_process_pamples(*left_in);
+      right_out = DISTORTION_process_samples(*right_in);
+      
+      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
+      left_out=map(left_out,0,16777215,1,POT1);
+      right_out=map(right_out,0,16777215‬,1,POT1);
+      break;
+      
+    case RINGMODULATOR: 
+      left_out = RING_MODULATOR_process_pamples(*left_in, POT2);
+      right_out = RING_MODULATOR_process_samples(*right_in, POT2);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+      
+    case REVERB:
+      left_out = REVERB_process_pamples(*left_in);
+      right_out = REVERB_process_samples(*right_in);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+      
+    case TREMOLO:
+      left_out = TREMOLO_process_pamples(*left_in);
+      right_out = TREMOLO_process_samples(*right_in);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+    
+  case DELAY:
   //Clear status allowing the interrupt to be fired again.
-  TC_GetStatus(TC1, 1);
  
   //Store current readings  
   sDelayBuffer0[DelayCounter]  = (left_in + (sDelayBuffer0[DelayCounter]))>>1;
