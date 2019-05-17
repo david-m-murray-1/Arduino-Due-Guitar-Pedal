@@ -2,13 +2,27 @@
 #include <delay.h>
 #include <distortion.h>
 #include <effect.h>
+#include <ringModulator.h>
+#include <ssc.h>
+
+#define LED1ON (PIOC -> PIO_SODR = PIO_PB24)
+#define LED2ON (PIOC -> PIO_SODR = PIO_PB25)
+#define LED3ON (PIOC -> PIO_SODR = PIO_PB26)
+#define LED4ON (PIOC -> PIO_SODR = PIO_PB28)
+#define LED5ON (PIOB -> PIO_SODR = PIO_PB25)
+#define LED1OFF (PIOC -> PIO_SODR = PIO_PB24)
+#define LED2OFF (PIOC -> PIO_SODR = PIO_PB25)
+#define LED3OFF (PIOC -> PIO_SODR = PIO_PB26)
+#define LED4OFF (PIOC -> PIO_SODR = PIO_PB28)
+#define LED5OFF (PIOB -> PIO_SODR = PIO_PB25)
 
 void TC4_Handler();
 void codecTxReadyInterrupt(HiFiChannelID_t);
 void codecRxReadyInterrupt(HiFiChannelID_t);
+
 void Distortion_process_samples(float *inputbuffer);
 void REVERB_process_samples(float *inputbuffer);
-void DELAY_process_samples(float *inputbuffer);
+void RINGMODULATOR_process_samples(float *inputbuffer);
 void TREMOLO_process_samples(float *inputbuffer);
 
 static uint32_t ldat = 0;
@@ -47,14 +61,10 @@ void setup() {
   // set codec into reset
   pinMode(7, OUTPUT);
   digitalWrite(7, LOW);
+  
   pinMode(LED_pwr, OUTPUT);
   digitalWrite(LED_pwr, HIGH);
   
-  pinMode(LED0, OUTPUT);
-  pinMode(LED1, OUTPUT);
-  pinMode(LED2, OUTPUT);
-  pinMode(LED3, OUTPUT);
-
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
 
@@ -70,8 +80,7 @@ void setup() {
   HiFi.onRxReady(codecRxReadyInterrupt);
 
   // release codec from reset
-  digitalWrite(7, HIGH);
-
+  PIOC -> PIO_SODR = PIO_PB23;     // digitalWrite(7,HIGH);
   // Enable both receiver and transmitter.
   HiFi.enableRx(true);
   HiFi.enableTx(true);
@@ -79,7 +88,7 @@ void setup() {
   ///////////////////////     EFFECT CHANGE INTERRUPTS      //////////////////
 
   attachInterrupt(DISTORTION_pin,switchTo_DISTORTION,LOW);
-  attachInterrupt(RINGMODULATOR_pin,switchTo_ECHO,LOW);
+  attachInterrupt(RINGMODULATOR_pin,switchTo_RINGMODULATOR,LOW);
   attachInterrupt(REVERB_pin,switchTo_REVERB,LOW);
   attachInterrupt(TREMOLO_pin,switchTo_TREMOLO,LOW);
 
@@ -95,14 +104,47 @@ void loop() {
   POT2=ADC->ADC_CDR[5];               
   POT3=ADC->ADC_CDR[4];                  
 
-
+  switch (EFFECT){
+    case DISTORTION:
+      left_out = DISTORTION_process_pamples(*left_in);
+      right_out = DISTORTION_process_samples(*right_in);
+      
+      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
+      left_out=map(left_out,0,16777215,1,POT1);
+      right_out=map(right_out,0,16777215‬,1,POT1);
+      break;
+      
+    case RINGMODULATOR: 
+      left_out = RINGMODULATOR_process_pamples(*left_in);
+      right_out = RINGMODULATOR_process_samples(*right_in);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+      
+    case REVERB:
+      left_out = REVERB_process_pamples(*left_in);
+      right_out = REVERB_process_samples(*right_in);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+      
+    case TREMOLO:
+      left_out = TREMOLO_process_pamples(*left_in);
+      right_out = TREMOLO_process_samples(*right_in);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
   }
 }
 
-void codecTxReadyInterrupt(HiFiChannelID_t channel,*left_in,*right_in,POT2)
+void codecTxReadyInterrupt(HiFiChannelID_t channel)
 {
-  
-      
   if (channel == HIFI_CHANNEL_ID_1)
   {
     // Left channel
@@ -130,99 +172,39 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
 }
 
 void switchTo_DISTORTION{
-  digitalWrite(LED0, HIGH);
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED2, LOW);
-  digitalWrite(LED3, LOW); 
+  LED1ON;
+  LED2OFF;
+  LED3OFF;
+  LED4OFF;
   EFFECT = DISTORTION;
   return EFFECT;
 }
 
-void switchTo_DELAY{
-  digitalWrite(LED0, HIGH);
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED2, LOW);
-  digitalWrite(LED3, LOW); 
-  EFFECT = ECHO;
+void switchTo_RINGMODULATOR{
+  LED1OFF;
+  LED2ON;
+  LED3OFF;
+  LED4OFF;
+  EFFECT = RINGMODULATOR;
   return EFFECT;
 }
 
 void switchTo_REVERB{
-  digitalWrite(LED0, HIGH);
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED2, LOW);
-  digitalWrite(LED3, LOW); 
+  LED1OFF;
+  LED2OFF;
+  LED3ON;
+  LED4OFF;
   EFFECT = REVERB;
   return EFFECT;
 }
 
 void switchTo_TREMOLO{
-  digitalWrite(LED0, HIGH);
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED2, LOW);
-  digitalWrite(LED3, LOW); 
+  LED1OFF;
+  LED2OFF;
+  LED3OFF;
+  LED4ON;
   EFFECT = TREMOLO;
   return EFFECT;
-}
-
-//Interrupt at 44.1KHz rate (every 22.6us)
-void TC4_Handler()
-{
-TC_GetStatus(TC1, 1);
-switch (EFFECT){
-    case DISTORTION:
-      left_out = DISTORTION_process_pamples(*left_in);
-      right_out = DISTORTION_process_samples(*right_in);
-      
-      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
-      left_out=map(left_out,0,16777215,1,POT1);
-      right_out=map(right_out,0,16777215‬,1,POT1);
-      break;
-      
-    case RINGMODULATOR: 
-      left_out = RING_MODULATOR_process_pamples(*left_in, POT2);
-      right_out = RING_MODULATOR_process_samples(*right_in, POT2);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-      
-    case REVERB:
-      left_out = REVERB_process_pamples(*left_in);
-      right_out = REVERB_process_samples(*right_in);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-      
-    case TREMOLO:
-      left_out = TREMOLO_process_pamples(*left_in);
-      right_out = TREMOLO_process_samples(*right_in);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-    
-  case DELAY:
-  //Clear status allowing the interrupt to be fired again.
- 
-  //Store current readings  
-  sDelayBuffer0[DelayCounter]  = (left_in + (sDelayBuffer0[DelayCounter]))>>1;
-  sDelayBuffer1[DelayCounter]  = (right_in + (sDelayBuffer0[DelayCounter]))>>1;
-
-  //Adjust Delay Depth based in pot0 position.
-  Delay_Depth =map(POT4>>2,0,2047,1,MAX_DELAY);
- 
-  //Increse/reset delay counter.   
-  DelayCounter++;
-  if(DelayCounter >= Delay_Depth) DelayCounter = 0; 
-  left_out = ((sDelayBuffer0[DelayCounter]));
- 
-  left_out=map(left_in,0,16777215,1,POT1);
-  right_out=map(right_in,0,16777215‬,1,POT1);
 }
 
  
