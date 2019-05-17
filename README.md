@@ -13,9 +13,11 @@ TODO: Finish effects algorithms for Tremolo and Reverb.
 
 TODO: setup clock for tremolo.
 
-DONE: change delay effect to ring-modulator
+TODO: Change all arduino code to c/c++
 
 TODO: plug-in pedal to PC to download new effects from website
+
+TODO: Drivers for PC interface
 
 TODO: website to host new effects
 
