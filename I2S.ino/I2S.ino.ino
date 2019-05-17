@@ -25,19 +25,12 @@ void REVERB_process_samples(float *inputbuffer);
 void RINGMODULATOR_process_samples(float *inputbuffer);
 void TREMOLO_process_samples(float *inputbuffer);
 
-static uint32_t ldat = 0;
-static uint32_t rdat = 0;
 static uint32_t left_in = 0;
 static uint32_t right_in = 0;
 
 volatile char EFFECT;
 
-int POT0, POT1, POT2, POT3;
-int LED0 = 7;
-int LED1 = 6;
-int LED2 = 5;
-int LED3 = 4;
-int LED_pwr = 3;
+volatile int POT0, POT1, POT2, POT3;
 
 void setup() {
   //////////////////////////  SET UP TIMER:  ////////////////////
@@ -58,13 +51,10 @@ void setup() {
   //(=(1*3)+1) for timer1 channel1 
   NVIC_EnableIRQ(TC4_IRQn);
  
-  // set codec into reset
-  pinMode(7, OUTPUT);
-  digitalWrite(7, LOW);
-  
-  pinMode(LED_pwr, OUTPUT);
-  digitalWrite(LED_pwr, HIGH);
-  
+  // set codec into reset. turn on led power indicator
+  PIOC -> PIO_CODR = PIO_PB23;     
+  LED5;
+
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
 
