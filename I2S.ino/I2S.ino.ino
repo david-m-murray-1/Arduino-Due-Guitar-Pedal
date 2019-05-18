@@ -81,13 +81,6 @@ void setup() {
   HiFi.enableRx(true);
   HiFi.enableTx(true);
 
-  ///////////////////////     EFFECT CHANGE INTERRUPTS      //////////////////
-
-  attachInterrupt(DISTORTION_pin,switchTo_DISTORTION,LOW);
-  attachInterrupt(RINGMODULATOR_pin,switchTo_RINGMODULATOR,LOW);
-  attachInterrupt(REVERB_pin,switchTo_REVERB,LOW);
-  attachInterrupt(TREMOLO_pin,switchTo_TREMOLO,LOW);
-
   ///////////////////////     ADC POTENTIOMETERS      //////////////////
   //ADC Configuration
   ADC->ADC_MR |= 0x80;       // adc: free running mode
