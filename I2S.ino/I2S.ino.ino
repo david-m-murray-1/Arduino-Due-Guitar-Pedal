@@ -21,13 +21,6 @@
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
 
 void TC4_Handler();
-void codecTxReadyInterrupt(HiFiChannelID_t);
-void codecRxReadyInterrupt(HiFiChannelID_t);
-
-void Distortion_process_samples(float *inputbuffer);
-void REVERB_process_samples(float *inputbuffer);
-void RINGMODULATOR_process_samples(float *inputbuffer);
-void TREMOLO_process_samples(float *inputbuffer);
 
 static uint32_t left_in = 0;
 static uint32_t right_in = 0;
