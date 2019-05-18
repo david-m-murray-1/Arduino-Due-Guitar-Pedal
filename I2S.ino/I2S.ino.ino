@@ -199,7 +199,6 @@ void switchTo_TREMOLO{
   return EFFECT;
 }
 
-
 void configure_ext_int_1(){
   PMC->PMC_PCER0 |= 1 << ID_PIOC;        // Enable Clock for PIOB - needed for sampling falling edge
   PIOC->PIO_PER = PIO_PC22;             // Enable IO pin control
