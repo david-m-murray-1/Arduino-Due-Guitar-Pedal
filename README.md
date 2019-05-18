@@ -4,6 +4,7 @@ Currently, I2S.ino is the 'main file'
 ARDUINO DUE 24-bit resolution guitar pedal.
 Cirrus CS4271 audio codec. 
 I2S Comm. with codec.
+https://www.adafruit.com/product/326
 
 4 potentiometers to change effect parameters
 
