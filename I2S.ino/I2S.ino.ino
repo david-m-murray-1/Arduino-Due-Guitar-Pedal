@@ -1,3 +1,6 @@
+/* ARDUINO DUE GUITAR PEDAL
+ * DAVID MURRAY
+ */
 #include <HiFi.h>
 #include <distortion.h>
 #include <reverb.h>
