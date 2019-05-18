@@ -39,7 +39,7 @@ volatile char EFFECT;
 volatile int POT0, POT1, POT2, POT3;
 
 void setup() {
-  //////////////////////////  SET UP TIMER:  ////////////////////
+  //////////////////////////  SET UP TIMER INTERRUPT  ////////////////////
   pmc_set_writeprotect(false);
   pmc_enable_periph_clk(ID_TC4);
  
@@ -57,13 +57,13 @@ void setup() {
   //(=(1*3)+1) for timer1 channel1 
   NVIC_EnableIRQ(TC4_IRQn);
  
-  // set codec into reset. turn on led power indicator
-  PIOC -> PIO_CODR = PIO_PB23;     
-  LED5;
+
 
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
-
+  // set codec into reset. turn on led power indicator
+  PIOC -> PIO_CODR = PIO_PB23;     
+  LED5;
   // Configure transmitter for 2 channels, external TK/TF clocks, 32 bit per
   // channel (data less than 32-bit is left justified in the 32 bit word, but
   // codec config needs 32 clocks per channel).
