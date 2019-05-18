@@ -13,6 +13,8 @@ TODO: effects
 
 TODO: add potentiometers as inputs to process_samples functions for each effect
 
+TODO: OLED screen
+
 TODO: Drivers for PC interface
 
 https://stackoverflow.com/questions/56196903/how-do-i-make-an-external-interrupt-in-c-on-arduino-due-sam3x8e-using-only-t
