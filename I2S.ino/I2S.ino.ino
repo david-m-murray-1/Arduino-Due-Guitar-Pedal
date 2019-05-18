@@ -27,6 +27,8 @@ void TREMOLO_process_samples(float *inputbuffer);
 
 static uint32_t left_in = 0;
 static uint32_t right_in = 0;
+static uint32_t left_out = 0;
+static uint32_t right_out = 0;
 
 volatile char EFFECT;
 
