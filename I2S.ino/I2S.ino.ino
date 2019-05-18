@@ -1,8 +1,9 @@
 #include <HiFi.h>
-#include <delay.h>
 #include <distortion.h>
-#include <effect.h>
+#include <reverb.h>
 #include <ringModulator.h>
+#include <tremolo.h>
+#include <effect.h>
 #include <ssc.h>
 
 #define LED1ON (PIOC -> PIO_SODR = PIO_PB24)        // set output data register SODR
