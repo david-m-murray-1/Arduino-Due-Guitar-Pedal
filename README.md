@@ -19,4 +19,7 @@ TODO: Drivers for PC interface
 
 https://stackoverflow.com/questions/56196903/how-do-i-make-an-external-interrupt-in-c-on-arduino-due-sam3x8e-using-only-t
 
+https://en.wikipedia.org/wiki/Ring_modulation
+https://en.wikibooks.org/wiki/Sound_Synthesis_Theory/Modulation_Synthesis
+
 
