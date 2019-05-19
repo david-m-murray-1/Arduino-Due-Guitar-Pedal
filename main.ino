@@ -23,11 +23,10 @@
 void TC4_Handler();
 void codecTxReadyInterrupt(HiFiChannelID_t);
 void codecRxReadyInterrupt(HiFiChannelID_t);
-
-void Distortion_process_samples(float *inputbuffer);
-void REVERB_process_samples(float *inputbuffer);
-void RINGMODULATOR_process_samples(float *inputbuffer);
-void TREMOLO_process_samples(float *inputbuffer);
+void configure_ext_int_1();
+void configure_ext_int_2();
+void configure_ext_int_3();
+void configure_ext_int_4();
 
 static uint32_t left_in = 0;
 static uint32_t right_in = 0;
@@ -39,15 +38,12 @@ volatile char EFFECT;
 volatile int POT0, POT1, POT2, POT3;
 
 void setup() {
-  PIOB->PIO_PER = PIO_PB27;
-  PIOB->PIO_PER = PIO_PB27;
-  PIOB->PIO_PER = PIO_PB27;
-  PIOB->PIO_PER = PIO_PB27;
-  PIOB->PIO_PER = PIO_PB27;
+  ////////////////////////// External Interrupts ////////////////
+  enable_ext_interrupts();
 
   //////////////////////////  SET UP TIMER:  ////////////////////
   pmc_set_writeprotect(false);
-  pmc_enable_periph_clk(ID_TC4);
+  pmc_enable_periph_clk(ID_TC4);    // ID_TC4: TIMER CHANNEL 1
  
   //we want wavesel 01 with RC 
   TC_Configure(TC1,1, TC_CMR_WAVE | TC_CMR_WAVSEL_UP_RC | TC_CMR_TCCLKS_TIMER_CLOCK2);
@@ -58,71 +54,8 @@ void setup() {
   TC1->TC_CHANNEL[1].TC_IER=TC_IER_CPCS;
   TC1->TC_CHANNEL[1].TC_IDR=~TC_IER_CPCS;
  
-  //Enable the interrupt in the nested vector interrupt controller 
-  //TC4_IRQn where 4 is the timer number * timer channels (3) + the channel number 
-  //(=(1*3)+1) for timer1 channel1 
-  NVIC_EnableIRQ(TC4_IRQn);
+  NVIC_EnableIRQ(TC4_IRQn);       // ID_TC4: TIMER CHANNEL 1
 
-void configure_ext_int_0(){
-  PMC->PMC_PCER0 |= 1 << ID_PIOC;        // Enable Clock for PIOB - needed for sampling falling edge
-  PIOC->PIO_PER = PIO_PC22;             // Enable IO pin control
-  PIOC->PIO_ODR = PIO_PC22;             // Disable output (set to High Z)
-  PIOC->PIO_PUER = PIO_PC22;            // Enable pull-up
-  PIOC->PIO_IFER = PIO_PC22;            // Enable Glitch/Debouncing filter\
-  PIOC->PIO_DIFSR = PIO_PC22;           // Select Debouncing filter
-  PIOC->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider 
-  PIOC->PIO_AIMER = PIO_PC22;           // Select additional detection mode (for single edge detection)
-  PIOC->PIO_ESR = PIO_PC22;             // The interrupt source is an Edge detection event.
-  PIOC->PIO_FELLSR = PIO_PC22;          // The interrupt source is set to a Falling Edge detection
-  PIOC->PIO_IER |= PIO_PC22;         // Enables the Input Change Interrupt on the I/O line.
-  NVIC_EnableIRQ(PIOC_IRQn);            // Enable Interrupt Handling in NVIC
-}
-
-void configure_ext_int_1(){
-  PMC->PMC_PCER1 |= 1 << ID_PIOB;         // Enable Clock for PIOB - needed for sampling falling edge
-  PIOB->PIO_PER = PIO_PB27;             // Enable IO pin control
-  PIOB->PIO_ODR = PIO_PB27;             // Disable output (set to High Z)
-  PIOB->PIO_PUER = PIO_PB27;            // Enable pull-up
-  PIOB->PIO_IFER = PIO_PB27;            // nable Glitch/Debouncing filter
-  PIOB->PIO_DIFSR = PIO_PB27;           // Select Debouncing filter 
-  PIOB->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider
-  PIOB->PIO_AIMER = PIO_PB27;           // Select additional detection mode (for single edge detection)
-  PIOB->PIO_ESR = PIO_PB27;             // The interrupt source is an Edge detection event.
-  PIOB->PIO_FELLSR = PIO_PB27;          // The interrupt source is set to a Falling Edge detection
-  PIOB->PIO_IER = PIO_PB27;             // Enables the Input Change Interrupt on the I/O line. 
-  NVIC_EnableIRQ(PIOB_IRQn);            // Enable Interrupt Handling in NVIC
-}
-
-void configure_ext_int_1(){
-  PMC->PMC_PCER1 |= 1 << ID_PIOB;         // Enable Clock for PIOB - needed for sampling falling edge
-  PIOB->PIO_PER = PIO_PB27;             // Enable IO pin control
-  PIOB->PIO_ODR = PIO_PB27;             // Disable output (set to High Z)
-  PIOB->PIO_PUER = PIO_PB27;            // Enable pull-up
-  PIOB->PIO_IFER = PIO_PB27;            // nable Glitch/Debouncing filter
-  PIOB->PIO_DIFSR = PIO_PB27;           // Select Debouncing filter 
-  PIOB->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider
-  PIOB->PIO_AIMER = PIO_PB27;           // Select additional detection mode (for single edge detection)
-  PIOB->PIO_ESR = PIO_PB27;             // The interrupt source is an Edge detection event.
-  PIOB->PIO_FELLSR = PIO_PB27;          // The interrupt source is set to a Falling Edge detection
-  PIOB->PIO_IER = PIO_PB27;             // Enables the Input Change Interrupt on the I/O line. 
-  NVIC_EnableIRQ(PIOB_IRQn);            // Enable Interrupt Handling in NVIC
-}
-
-void configure_ext_int_1(){
-  PMC->PMC_PCER0 |= 1 << ID_PIOB;         // Enable Clock for PIOB - needed for sampling falling edge
-  PIOB->PIO_PER = PIO_PB27;             // Enable IO pin control
-  PIOB->PIO_ODR = PIO_PB27;             // Disable output (set to High Z)
-  PIOB->PIO_PUER = PIO_PB27;            // Enable pull-up
-  PIOB->PIO_IFER = PIO_PB27;            // nable Glitch/Debouncing filter
-  PIOB->PIO_DIFSR = PIO_PB27;           // Select Debouncing filter 
-  PIOB->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider
-  PIOB->PIO_AIMER = PIO_PB27;           // Select additional detection mode (for single edge detection)
-  PIOB->PIO_ESR = PIO_PB27;             // The interrupt source is an Edge detection event.
-  PIOB->PIO_FELLSR = PIO_PB27;          // The interrupt source is set to a Falling Edge detection
-  PIOB->PIO_IER = PIO_PB27;             // Enables the Input Change Interrupt on the I/O line. 
-  NVIC_EnableIRQ(PIOB_IRQn);            // Enable Interrupt Handling in NVIC
-}
-  
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
   // set codec into reset. turn on led power indicator
@@ -150,7 +83,8 @@ void configure_ext_int_1(){
   ADC->ADC_MR |= 0x80;       // adc: free running mode
   ADC->ADC_CR= 0x02;         // start adc conversion
   ADC->ADC_CHER= 0xF0;       // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
-  
+
+  ///////////////////////             MAIN            //////////////////
 void loop() {
   POT0=ADC->ADC_CDR[7];      // read effect parameters from POTs        
   POT1=ADC->ADC_CDR[6];                   
@@ -259,5 +193,108 @@ void switchTo_TREMOLO{
   EFFECT = TREMOLO;
   return EFFECT;
 }
+
+// configure interrupt for 4 pins
+void enable_ext_interrupts(){
+  pmc_enable_periph_clk(ID_PIOC);
+  pio_set_input(PIOC, PIO_PC22, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC22, PIO_IT_EDGE, pb_interrupt_1);
+  pio_enable_interrupt(PIOC, PIO_PC22);
+  NVIC_EnableIRQ(PIOC_IRQn);
+
+  pmc_enable_periph_clk(ID_PIOC);
+  pio_set_input(PIOC, PIO_PC23, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC23, PIO_IT_EDGE, pb_interrupt_1);
+  pio_enable_interrupt(PIOC, PIO_PC23);
+  NVIC_EnableIRQ(PIOC_IRQn);
+
+  pmc_enable_periph_clk(ID_PIOC);
+  pio_set_input(PIOC, PIO_PC24, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC24, PIO_IT_EDGE, pb_interrupt_1);
+  pio_enable_interrupt(PIOC, PIO_PC24);
+  NVIC_EnableIRQ(PIOC_IRQn);
+
+  pmc_enable_periph_clk(ID_PIOC);
+  pio_set_input(PIOC, PIO_PC25, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC25, PIO_IT_EDGE, pb_interrupt_1);
+  pio_enable_interrupt(PIOC, PIO_PC25);
+  NVIC_EnableIRQ(PIOC_IRQn);
+}
+
+// configure interrupt for 4 pins: C
+void configure_ext_int_1(){
+  PMC->PMC_PCER0 |= 1 << ID_PIOC;        // Enable Clock for PIOB - needed for sampling falling edge
+  PIOC->PIO_PER |= PIO_PC22;             // Enable IO pin control
+  PIOC->PIO_ODR = PIO_PC22;             // Disable output (set to High Z)
+  PIOC->PIO_PUER = PIO_PC22;            // Enable pull-up
+  PIOC->PIO_IFER = PIO_PC22;            // Enable Glitch/Debouncing filter
+  PIOC->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider 
+  PIOC->PIO_ESR = PIO_PC22;             // The interrupt source is an Edge detection event.
+  PIOC->PIO_FELLSR = PIO_PC22;          // The interrupt source is set to a Falling Edge detection
+  PIOC->PIO_IER |= PIO_PC22;         // Enables the Input Change Interrupt on the I/O line.
+  NVIC_EnableIRQ(PIOC_IRQn);            // Enable Interrupt Handling in NVIC
+}
+
+void configure_ext_int_1(){
+  PMC->PMC_PCER0 |= 1 << ID_PIOC;        // Enable Clock for PIOB - needed for sampling falling edge
+  PIOC->PIO_PER = PIO_PC22;             // Enable IO pin control
+  PIOC->PIO_ODR = PIO_PC22;             // Disable output (set to High Z)
+  PIOC->PIO_PUER = PIO_PC22;            // Enable pull-up
+  PIOC->PIO_IFER = PIO_PC22;            // Enable Glitch/Debouncing filter\
+  PIOC->PIO_DIFSR = PIO_PC22;           // Select Debouncing filter
+  PIOC->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider 
+  PIOC->PIO_AIMER = PIO_PC22;           // Select additional detection mode (for single edge detection)
+  PIOC->PIO_ESR = PIO_PC22;             // The interrupt source is an Edge detection event.
+  PIOC->PIO_FELLSR = PIO_PC22;          // The interrupt source is set to a Falling Edge detection
+  PIOC->PIO_IER |= PIO_PC22;         // Enables the Input Change Interrupt on the I/O line.
+  NVIC_EnableIRQ(PIOC_IRQn);            // Enable Interrupt Handling in NVIC
+}
+
+void configure_ext_int_2(){
+  PMC->PMC_PCER1 |= 1 << ID_PIOB;         // Enable Clock for PIOB - needed for sampling falling edge
+  PIOB->PIO_PER = PIO_PB27;             // Enable IO pin control
+  PIOB->PIO_ODR = PIO_PB27;             // Disable output (set to High Z)
+  PIOB->PIO_PUER = PIO_PB27;            // Enable pull-up
+  PIOB->PIO_IFER = PIO_PB27;            // nable Glitch/Debouncing filter
+  PIOB->PIO_DIFSR = PIO_PB27;           // Select Debouncing filter 
+  PIOB->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider
+  PIOB->PIO_AIMER = PIO_PB27;           // Select additional detection mode (for single edge detection)
+  PIOB->PIO_ESR = PIO_PB27;             // The interrupt source is an Edge detection event.
+  PIOB->PIO_FELLSR = PIO_PB27;          // The interrupt source is set to a Falling Edge detection
+  PIOB->PIO_IER = PIO_PB27;             // Enables the Input Change Interrupt on the I/O line. 
+  NVIC_EnableIRQ(PIOB_IRQn);            // Enable Interrupt Handling in NVIC
+}
+
+void configure_ext_int_3(){
+  PMC->PMC_PCER0 |= 1 << ID_PIOB;         // Enable Clock for PIOB - needed for sampling falling edge
+  PIOB->PIO_PER = PIO_PB27;             // Enable IO pin control
+  PIOB->PIO_ODR = PIO_PB27;             // Disable output (set to High Z)
+  PIOB->PIO_PUER = PIO_PB27;            // Enable pull-up
+  PIOB->PIO_IFER = PIO_PB27;            // nable Glitch/Debouncing filter
+  PIOB->PIO_DIFSR = PIO_PB27;           // Select Debouncing filter 
+  PIOB->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider
+  PIOB->PIO_AIMER = PIO_PB27;           // Select additional detection mode (for single edge detection)
+  PIOB->PIO_ESR = PIO_PB27;             // The interrupt source is an Edge detection event.
+  PIOB->PIO_FELLSR = PIO_PB27;          // The interrupt source is set to a Falling Edge detection
+  PIOB->PIO_IER = PIO_PB27;             // Enables the Input Change Interrupt on the I/O line. 
+  NVIC_EnableIRQ(PIOB_IRQn);            // Enable Interrupt Handling in NVIC
+}
+
+void configure_ext_int_4(){
+  PMC->PMC_PCER0 |= 1 << ID_PIOB;         // Enable Clock for PIOB - needed for sampling falling edge
+  PIOB->PIO_PER = PIO_PB27;             // Enable IO pin control
+  PIOB->PIO_ODR = PIO_PB27;             // Disable output (set to High Z)
+  PIOB->PIO_PUER = PIO_PB27;            // Enable pull-up
+  PIOB->PIO_IFER = PIO_PB27;            // nable Glitch/Debouncing filter
+  PIOB->PIO_DIFSR = PIO_PB27;           // Select Debouncing filter 
+  PIOB->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider
+  PIOB->PIO_AIMER = PIO_PB27;           // Select additional detection mode (for single edge detection)
+  PIOB->PIO_ESR = PIO_PB27;             // The interrupt source is an Edge detection event.
+  PIOB->PIO_FELLSR = PIO_PB27;          // The interrupt source is set to a Falling Edge detection
+  PIOB->PIO_IER = PIO_PB27;             // Enables the Input Change Interrupt on the I/O line. 
+  NVIC_EnableIRQ(PIOB_IRQn);            // Enable Interrupt Handling in NVIC
+}
+
+
 
  
