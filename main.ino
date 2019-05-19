@@ -59,7 +59,7 @@ void setup() {
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
   // set codec into reset. turn on led power indicator
-  PIOC -> PIO_CODR = PIO_PC23;     
+  PIOC -> PIO_CODR = PIO_PC21;     
   LED5;
   // Configure transmitter for 2 channels, external TK/TF clocks, 32 bit per
   // channel (data less than 32-bit is left justified in the 32 bit word, but
