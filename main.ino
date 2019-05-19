@@ -4,6 +4,7 @@
 #include <Adafruit_SSD1306.h>
 #include <splash.h>
 #include <Wire.h>
+#include <SPI.h>
 #include <HiFi.h>
 #include <distortion.h>
 #include <reverb.h>
