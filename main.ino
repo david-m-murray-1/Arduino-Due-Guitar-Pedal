@@ -1,6 +1,9 @@
 /* ARDUINO DUE GUITAR PEDAL
  * DAVID MURRAY
  */
+ #include <Adafruit_SSD1306.h>
+#include <splash.h>
+#include <Wire.h>
 #include <HiFi.h>
 #include <distortion.h>
 #include <reverb.h>
@@ -41,6 +44,11 @@ void setup() {
   ////////////////////////// External Interrupts ////////////////
   enable_ext_interrupts();
 
+  //////////////////////////      I2C        ////////////////////
+  Serial.begin(9600);
+  display.display();
+  display.clearDisplay();
+  
   //////////////////////////  SET UP TIMER:  ////////////////////
   pmc_set_writeprotect(false);
   pmc_enable_periph_clk(ID_TC4);    // ID_TC4: TIMER CHANNEL 1
@@ -158,7 +166,12 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   }
 }
 
-void switchTo_DISTORTION{
+void switchTo_DISTORTION{ 
+  display.clearDisplay();
+  display.setTextSize(1);             // Normal 1:1 pixel scale
+  display.setTextColor(WHITE);        // Draw white text
+  display.setCursor(0,0);             // Start at top-left corner
+  display.println(F("DISTORTION"));
   LED1ON;
   LED2OFF;
   LED3OFF;
@@ -168,6 +181,11 @@ void switchTo_DISTORTION{
 }
 
 void int_RINGMODULATOR{
+  display.clearDisplay();
+  display.setTextSize(1);             // Normal 1:1 pixel scale
+  display.setTextColor(WHITE);        // Draw white text
+  display.setCursor(0,0);             // Start at top-left corner
+  display.println(F("RINGMODULATOR"));
   LED1OFF;
   LED2ON;
   LED3OFF;
@@ -177,6 +195,11 @@ void int_RINGMODULATOR{
 }
 
 void int_REVERB{
+  display.clearDisplay();
+  display.setTextSize(1);             // Normal 1:1 pixel scale
+  display.setTextColor(WHITE);        // Draw white text
+  display.setCursor(0,0);             // Start at top-left corner
+  display.println(F("REVERB"));
   LED1OFF;
   LED2OFF;
   LED3ON;
@@ -186,12 +209,21 @@ void int_REVERB{
 }
 
 void int_TREMOLO{
+  display.clearDisplay();
+  display.setTextSize(1);             // Normal 1:1 pixel scale
+  display.setTextColor(WHITE);        // Draw white text
+  display.setCursor(0,0);             // Start at top-left corner
+  display.println(F("TREMOLO"));
   LED1OFF;
   LED2OFF;
   LED3OFF;
   LED4ON;
   EFFECT = TREMOLO;
   return EFFECT;
+}
+
+void displayEffect(*char effect_name){
+  display
 }
 
 // configure interrupt for 4 pins
