@@ -81,7 +81,7 @@ void setup() {
   HiFi.onRxReady(codecRxReadyInterrupt);
 
   // release codec from reset
-  PIOC -> PIO_SODR = PIO_PC23;     // digitalWrite(7,HIGH);
+  PIOC -> PIO_SODR = PIO_PC21;     // digitalWrite(7,HIGH);
   // Enable both receiver and transmitter.
   HiFi.enableRx(true);
   HiFi.enableTx(true);
