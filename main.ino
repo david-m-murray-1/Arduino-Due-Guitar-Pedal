@@ -110,12 +110,14 @@ void loop() {
       break;
       
     case RINGMODULATOR: 
+      setFs(pot2);
+      setFc(pot3);                                                  // carrier frequency
       left_out = RINGMODULATOR_process_pamples(*left_in);
       right_out = RINGMODULATOR_process_samples(*right_in);
       
       //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
+      left_out=map(left_in,0,4095,1,POT1);
+      right_out=map(right_in,0,4095,1,POT1);
       break;
       
     case REVERB:
