@@ -167,7 +167,7 @@ void switchTo_DISTORTION{
   return EFFECT;
 }
 
-void switchTo_RINGMODULATOR{
+void int_RINGMODULATOR{
   LED1OFF;
   LED2ON;
   LED3OFF;
@@ -176,7 +176,7 @@ void switchTo_RINGMODULATOR{
   return EFFECT;
 }
 
-void switchTo_REVERB{
+void int_REVERB{
   LED1OFF;
   LED2OFF;
   LED3ON;
@@ -185,7 +185,7 @@ void switchTo_REVERB{
   return EFFECT;
 }
 
-void switchTo_TREMOLO{
+void int_TREMOLO{
   LED1OFF;
   LED2OFF;
   LED3OFF;
@@ -198,28 +198,28 @@ void switchTo_TREMOLO{
 void enable_ext_interrupts(){
   pmc_enable_periph_clk(ID_PIOC);
   pio_set_input(PIOC, PIO_PC22, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC22, PIO_IT_EDGE, pb_interrupt_1);
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC22, PIO_IT_EDGE, int_DISTORTION);
   pio_enable_interrupt(PIOC, PIO_PC22);
   NVIC_EnableIRQ(PIOC_IRQn);
 
   pmc_enable_periph_clk(ID_PIOC);
   pio_set_input(PIOC, PIO_PC23, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC23, PIO_IT_EDGE, pb_interrupt_1);
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC23, PIO_IT_EDGE, int_RINGMODULATOR);
   pio_enable_interrupt(PIOC, PIO_PC23);
   NVIC_EnableIRQ(PIOC_IRQn);
 
   pmc_enable_periph_clk(ID_PIOC);
   pio_set_input(PIOC, PIO_PC24, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC24, PIO_IT_EDGE, pb_interrupt_1);
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC24, PIO_IT_EDGE, int_REVERB);
   pio_enable_interrupt(PIOC, PIO_PC24);
   NVIC_EnableIRQ(PIOC_IRQn);
 
   pmc_enable_periph_clk(ID_PIOC);
   pio_set_input(PIOC, PIO_PC25, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC25, PIO_IT_EDGE, pb_interrupt_1);
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC25, PIO_IT_EDGE, int_TREMOLO);
   pio_enable_interrupt(PIOC, PIO_PC25);
   NVIC_EnableIRQ(PIOC_IRQn);
-}
+}  
 
 // configure interrupt for 4 pins: C
 void configure_ext_int_1(){
