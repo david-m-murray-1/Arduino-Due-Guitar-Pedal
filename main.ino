@@ -1,7 +1,7 @@
 /* ARDUINO DUE GUITAR PEDAL
  * DAVID MURRAY
  */
- #include <Adafruit_SSD1306.h>
+#include <Adafruit_SSD1306.h>
 #include <splash.h>
 #include <Wire.h>
 #include <HiFi.h>
