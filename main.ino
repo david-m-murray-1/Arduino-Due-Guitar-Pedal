@@ -1,10 +1,9 @@
 /* ARDUINO DUE GUITAR PEDAL
  * DAVID MURRAY
  */
-#include <Adafruit_SSD1306.h>
+ #include <Adafruit_SSD1306.h>
 #include <splash.h>
 #include <Wire.h>
-#include <SPI.h>
 #include <HiFi.h>
 #include <distortion.h>
 #include <reverb.h>
@@ -25,12 +24,12 @@
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
 
 void TC4_Handler();
-void codecTxReadyInterrupt(HiFiChannelID_t);
-void codecRxReadyInterrupt(HiFiChannelID_t);
-void configure_ext_int_1();
-void configure_ext_int_2();
-void configure_ext_int_3();
-void configure_ext_int_4();
+codecTxReadyInterrupt(HiFiChannelID_t channel);
+codecRxReadyInterrupt(HiFiChannelID_t channel);
+void switchTo_DISTORTION();
+void switchTo_RINGMODULATOR{ 
+void switchTo_REVERB(); 
+void switchTo_TREMOLO():
 
 static uint32_t left_in = 0;
 static uint32_t right_in = 0;
@@ -167,7 +166,7 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   }
 }
 
-void switchTo_DISTORTION{ 
+void int_DISTORTION{ 
   display.clearDisplay();
   display.setTextSize(1);             // Normal 1:1 pixel scale
   display.setTextColor(WHITE);        // Draw white text
