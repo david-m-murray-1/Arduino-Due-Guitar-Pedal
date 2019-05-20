@@ -5,6 +5,8 @@ Cirrus CS4271 audio codec.
 I2S Comm. with codec.
 https://www.adafruit.com/product/326
 
+ASF Source Code documentation: https://asf.microchip.com/docs/latest/
+
 4 potentiometers to change effect parameters
 
 4 digital effects: Distortion, Ring Modulator, Tremolo, and Reverb.
