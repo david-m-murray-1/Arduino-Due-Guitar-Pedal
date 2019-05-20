@@ -1,7 +1,8 @@
 /* ARDUINO DUE GUITAR PEDAL
  * DAVID MURRAY
  */
- #include <Adafruit_SSD1306.h>
+#include <asf.h>
+#include <Adafruit_SSD1306.h>
 #include <splash.h>
 #include <Wire.h>
 #include <HiFi.h>
@@ -41,6 +42,16 @@ volatile char EFFECT;
 volatile int POT0, POT1, POT2, POT3;
 
 void setup() {
+  ////////////////////////// enable LED outputs  ////////////////
+  PIOB->PIO_PER = PIO_PB25;  //Enable PIO
+  PIOC->PIO_PER = (PIO_PC24 | PIO_PC25 | PIO_PC26 | PIO_PC28);  //Enable PIO
+
+  PIOB->PIO_OER = PIO_PB25;  //Set to OUTPUT
+  PIOC->PIO_OER = (PIO_PC24 | PIO_PB25 | PIO_PC25 | PIO_PC26 | PIO_PC28);  //Set to OUTPUT
+
+  PIOB->PIO_PUDR = PIO_PB25; //Disable the pull up resistor
+  PIOC->PIO_PUDR = (PIO_PC24 | PIO_PC25 | PIO_PC26 | PIO_PC28); //Disable the pull up resistor
+
   ////////////////////////// External Interrupts ////////////////
   enable_NVIC_interrupts();
 
