@@ -24,7 +24,7 @@
 #define LED4OFF (PIOC -> PIO_CODR = PIO_PC28)
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
 
-void TC4_Handler();
+void TC4_Handler();                                 // setup clock for tremolo/ringmodulator.
 codecTxReadyInterrupt(HiFiChannelID_t channel);
 codecRxReadyInterrupt(HiFiChannelID_t channel);
 void switchTo_DISTORTION();
