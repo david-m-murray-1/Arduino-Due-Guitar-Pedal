@@ -42,7 +42,7 @@ volatile int POT0, POT1, POT2, POT3;
 
 void setup() {
   ////////////////////////// External Interrupts ////////////////
-  enable_ext_interrupts();
+  enable_NVIC_interrupts();
 
   //////////////////////////      I2C        ////////////////////
   Serial.begin(9600);
@@ -224,63 +224,32 @@ void int_TREMOLO{
   return EFFECT;
 }
 
-void displayEffect(*char effect_name){
-  display
-}
+void enable_NVIC_interrupts(){
+// PORT A NVIC
+  pmc_enable_periph_clk(ID_PIOA);
+  pio_set_input(PIOA, PIO_PA29, PIO_PULLUP;
+  pio_handler_set(PIOA, ID_PIOC, PIO_PA29, PIO_IT_EDGE, int_RINGMODULATOR);
+  pio_enable_interrupt(PIOA, PIO_PA29);
+  NVIC_EnableIRQ(PIOA_IRQn);
 
-// configure interrupt for 4 pins
-void enable_ext_interrupts(){
+// PORT B NVIC
+  pmc_enable_periph_clk(ID_PIOB);
+  pio_set_input(PIOB, PIO_PB25, PIO_PULLUP;
+  pio_handler_set(PIOB, ID_PIOB, PIO_PB25, PIO_IT_EDGE, int_TREMOLO);
+  pio_enable_interrupt(PIOB, PIO_PB25);
+  NVIC_EnableIRQ(PIOB_IRQn);
+
+// PORT C NVIC
   pmc_enable_periph_clk(ID_PIOC);
   pio_set_input(PIOC, PIO_PC22, PIO_PULLUP;
   pio_handler_set(PIOC, ID_PIOC, PIO_PC22, PIO_IT_EDGE, int_DISTORTION);
   pio_enable_interrupt(PIOC, PIO_PC22);
   NVIC_EnableIRQ(PIOC_IRQn);
 
-  pmc_enable_periph_clk(ID_PIOC);
-  pio_set_input(PIOC, PIO_PC23, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC23, PIO_IT_EDGE, int_RINGMODULATOR);
-  pio_enable_interrupt(PIOC, PIO_PC23);
-  NVIC_EnableIRQ(PIOC_IRQn);
-
-  pmc_enable_periph_clk(ID_PIOC);
-  pio_set_input(PIOC, PIO_PC24, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC24, PIO_IT_EDGE, int_REVERB);
-  pio_enable_interrupt(PIOC, PIO_PC24);
-  NVIC_EnableIRQ(PIOC_IRQn);
-
-  pmc_enable_periph_clk(ID_PIOC);
-  pio_set_input(PIOC, PIO_PC25, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC25, PIO_IT_EDGE, int_TREMOLO);
-  pio_enable_interrupt(PIOC, PIO_PC25);
-  NVIC_EnableIRQ(PIOC_IRQn);
+// PORT D NVIC
+  pmc_enable_periph_clk(ID_PIOD);
+  pio_set_input(PIOD, PIO_PD7, PIO_PULLUP;
+  pio_handler_set(PIOD, ID_PIOD, PIO_PD7, PIO_IT_EDGE, int_REVERB);
+  pio_enable_interrupt(PIOD, PIO_PD7);
+  NVIC_EnableIRQ(PIOD_IRQn);
 }  
-
-// configure interrupt for 4 pins: C
-void configure_ext_int_1(){
-  PMC->PMC_PCER0 |= 1 << ID_PIOC;        // Enable Clock for PIOB - needed for sampling falling edge
-  PIOC->PIO_PER |= PIO_PC22;             // Enable IO pin control
-  PIOC->PIO_ODR = PIO_PC22;             // Disable output (set to High Z)
-  PIOC->PIO_PUER = PIO_PC22;            // Enable pull-up
-  PIOC->PIO_IFER = PIO_PC22;            // Enable Glitch/Debouncing filter
-  PIOC->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider 
-  PIOC->PIO_ESR = PIO_PC22;             // The interrupt source is an Edge detection event.
-  PIOC->PIO_FELLSR = PIO_PC22;          // The interrupt source is set to a Falling Edge detection
-  PIOC->PIO_IER |= PIO_PC22;         // Enables the Input Change Interrupt on the I/O line.
-  NVIC_EnableIRQ(PIOC_IRQn);            // Enable Interrupt Handling in NVIC
-}
-
-void configure_ext_int_1(){
-  PMC->PMC_PCER0 |= 1 << ID_PIOC;        // Enable Clock for PIOB - needed for sampling falling edge
-  PIOC->PIO_PER = PIO_PC22;             // Enable IO pin control
-  PIOC->PIO_ODR = PIO_PC22;             // Disable output (set to High Z)
-  PIOC->PIO_PUER = PIO_PC22;            // Enable pull-up
-  PIOC->PIO_IFER = PIO_PC22;            // Enable Glitch/Debouncing filter\
-  PIOC->PIO_DIFSR = PIO_PC22;           // Select Debouncing filter
-  PIOC->PIO_SCDR = 0x4FF;               // Set Debouncing clock divider 
-  PIOC->PIO_AIMER = PIO_PC22;           // Select additional detection mode (for single edge detection)
-  PIOC->PIO_ESR = PIO_PC22;             // The interrupt source is an Edge detection event.
-  PIOC->PIO_FELLSR = PIO_PC22;          // The interrupt source is set to a Falling Edge detection
-  PIOC->PIO_IER |= PIO_PC22;         // Enables the Input Change Interrupt on the I/O line.
-  NVIC_EnableIRQ(PIOC_IRQn);            // Enable Interrupt Handling in NVIC
-}
- 
