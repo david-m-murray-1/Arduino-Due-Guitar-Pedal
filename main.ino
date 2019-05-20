@@ -27,10 +27,10 @@
 void TC4_Handler();                                 // setup clock for tremolo/ringmodulator.
 codecTxReadyInterrupt(HiFiChannelID_t channel);
 codecRxReadyInterrupt(HiFiChannelID_t channel);
-void switchTo_DISTORTION();
-void switchTo_RINGMODULATOR{ 
-void switchTo_REVERB(); 
-void switchTo_TREMOLO():
+void int_DISTORTION();
+void int_RINGMODULATOR{ 
+void int_REVERB(); 
+void int_TREMOLO():
 
 static uint32_t left_in = 0;
 static uint32_t right_in = 0;
@@ -112,6 +112,8 @@ void loop() {
 
   switch (EFFECT){
     case DISTORTION:
+      setTimbre(POT2);
+      setDepth(POT3);
       left_out = DISTORTION_process_pamples(*left_in);
       right_out = DISTORTION_process_samples(*right_in);
       
