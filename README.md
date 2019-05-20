@@ -9,8 +9,13 @@ https://www.adafruit.com/product/326
 
 4 digital effects: Distortion, Ring Modulator, Tremolo, and Reverb.
 
-TODO: effects
+TODO: MATLAB: Find TFs for effects
+  find num and denom of TF
+  find s transform
+  find z transform (fn: c2d) convert from continuous model to discrete time
+  convert to c
 
+TODO: research parameters for effects
 TODO: add potentiometers as inputs to process_samples functions for each effect
 
 DONE: OLED screen
@@ -26,4 +31,6 @@ http://ee.bradley.edu/projects/proj2008/gegudps/Czubak_Raheja_Final_Paper.pdf
 
 echo and reverb direct transforms
 https://www.eurasip.org/Proceedings/Eusipco/Eusipco2006/papers/1568980587.pdf
+
+
 
