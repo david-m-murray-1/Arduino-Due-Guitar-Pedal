@@ -24,3 +24,6 @@ https://en.wikibooks.org/wiki/Sound_Synthesis_Theory/Modulation_Synthesis
 http://www.ti.com/lit/ml/sprp499/sprp499.pdf
 http://ee.bradley.edu/projects/proj2008/gegudps/Czubak_Raheja_Final_Paper.pdf
 
+echo and reverb direct transforms
+https://www.eurasip.org/Proceedings/Eusipco/Eusipco2006/papers/1568980587.pdf
+
