@@ -10,7 +10,7 @@ class Distortion : public Effect
 public:
   void setTimbre(float timbre);
   void setDepth(float depth);
-  void process_samples(float *inputbuffer, float *outputbuffer);
+  void Distortion_process_samples(float *inputbuffer, float *outputbuffer);
 
   float timbre = 1;
   float timbreInverse;
