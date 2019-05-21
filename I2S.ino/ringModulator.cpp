@@ -11,7 +11,7 @@ void RingModulator::setFc(float Fc){
 }
 
 //processing samples
-void RingModulator::process_samples(float *inputbuffer, float *outputbuffer)
+void RingModulator::process_samples(float *inputbuffer)
 {
     for(int bufptr=0; bufptr<FRAMESPERBUFFER; bufptr++) {
       // inputbuffer[bufptr] = sin(2*M_PI*inputbuffer[bufptr]*(Fc/Fs)); //
