@@ -1,4 +1,5 @@
 #include "ringModulator.h"
+#include "math.h"
 
 float mod_phase=0;
 
