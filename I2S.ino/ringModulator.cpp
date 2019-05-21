@@ -1,5 +1,4 @@
 #include "ringModulator.h"
-#include "math.h"
 
 float mod_phase=0;
 
@@ -27,7 +26,7 @@ void RingModulator::process_samples(float *inputbuffer, float *outputbuffer)
       // outputbuffer[bufptr] = inputbuffer[bufptr];
 
       outputbuffer[bufptr]= 0.005 * inputbuffer[bufptr] * (1 + Fs*sin(mod_phase) );
-      mod_phase+=Fc*2*M_PI/SAMPLERATE;
+      mod_phase+=Fc*2*M_PI/SAMPLERATE;                                                    // M_PI is from math.h
     }
   }
 }
