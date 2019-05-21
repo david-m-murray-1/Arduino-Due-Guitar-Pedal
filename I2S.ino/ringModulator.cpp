@@ -13,13 +13,6 @@ void RingModulator::setFc(float Fc){
 //processing samples
 void RingModulator::process_samples(float *inputbuffer, float *outputbuffer)
 {
- 
-  if (bypass == 1) {
-    for(int bufptr=0; bufptr<FRAMESPERBUFFER; bufptr++) {
-      outputbuffer[bufptr] = inputbuffer[bufptr];
-    }
-  }
-  else {
     for(int bufptr=0; bufptr<FRAMESPERBUFFER; bufptr++) {
       // inputbuffer[bufptr] = sin(2*M_PI*inputbuffer[bufptr]*(Fc/Fs)); //
       // outputbuffer[bufptr] = 0.5 * inputbuffer[bufptr]; // Ring modulation
