@@ -34,5 +34,8 @@ http://ee.bradley.edu/projects/proj2008/gegudps/Czubak_Raheja_Final_Paper.pdf
 echo and reverb direct transforms
 https://www.eurasip.org/Proceedings/Eusipco/Eusipco2006/papers/1568980587.pdf
 
+more reverb. direct transform II
+https://ccrma.stanford.edu/~jos/pasp/History_FDNs_Artificial_Reverberation.html
+
 
 
