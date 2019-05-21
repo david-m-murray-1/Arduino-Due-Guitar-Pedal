@@ -11,7 +11,7 @@ void Distortion::setDepth(float depth){
 }
 
 //processing samples
-void Distortion::process_samples(float *inputbuffer, float *outputbuffer)
+void Distortion::Distortion_process_samples(float *inputbuffer, float *outputbuffer)
 {
   if (bypass == 1) {
     for(int bufptr=0; bufptr<FRAMESPERBUFFER; bufptr++) {
