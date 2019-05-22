@@ -14,6 +14,8 @@ ASF Source Code documentation: https://asf.microchip.com/docs/latest/
 
 4 digital effects: Distortion, Ring Modulator, Tremolo, and Reverb.
 
+TODO: LINEARLY NORMALIZE INPUT SIGNAL.  THEN ADD EFFECTS.
+
 TODO: MATLAB: Find TFs for effects
   find num and denom of TF
   find s transform
