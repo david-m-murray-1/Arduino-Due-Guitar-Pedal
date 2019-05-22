@@ -40,5 +40,8 @@ https://www.eurasip.org/Proceedings/Eusipco/Eusipco2006/papers/1568980587.pdf
 more reverb. direct transform II
 https://ccrma.stanford.edu/~jos/pasp/History_FDNs_Artificial_Reverberation.html
 
+Schematic
+https://www.analog.com/en/analog-dialogue/articles/high-speed-amplifiers-make-clock-buffers.html
+
 
 
