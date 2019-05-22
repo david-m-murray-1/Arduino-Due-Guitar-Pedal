@@ -7,9 +7,10 @@
 #define ENABLE_DEBUG
 #define SIG_LENGTH 320
 
-using namespace std;
 
-int matrix[5][4] = { 0, 1, 1, 0, -1, 0, 0, -1, 1, 0, 0, -1, 0, 1, -1, 0 };
+extern double InputSignal_f32_1kHz_15kHz[SIG_LENGTH];
+
+int feedback_matrix[4][4] = { 0, 1, 1, 0, -1, 0, 0, -1, 1, 0, 0, -1, 0, 1, -1, 0 };
 // 0, 1, 1, 0, -1, 0, 0, -1, 1, 0, 0, -1, 0, 1, -1, 0
 int decaylines[4] = { 887, 1279, 2089, 3167 };
 
@@ -29,14 +30,14 @@ struct Signal {
 int ones_array[4] = { 1 };
 r_lo = 1 - 
 
-extern double InputSignal_f32_1kHz_15kHz[SIG_LENGTH];
 
 double calc_signal_mean(double *sig_src_arr, int sig_length);
-
 double calc_signal_variance(double *sig_src_arr, double sig_mean, int sig_length);
 
 double signal_mean;
 double signal_variance;
+
+using namespace std;
 
 int main()
 {
@@ -47,8 +48,8 @@ int main()
 	signal_variance = calc_signal_variance(&InputSignal_f32_1kHz_15kHz[0], signal_mean, SIG_LENGTH);
 	cout << "\nVariance =" << signal_variance << endl;
 	*/
-	cout << matrix[1][0] << endl;
-	cout << size(matrix[1]) << endl;
+	cout << feedback_matrix[1][0] << endl;
+	cout << size(feedback_matrix[1]) << endl;
 #endif
 	return 0;
 }
