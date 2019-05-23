@@ -83,7 +83,7 @@ void setup() {
 	.ul_mck = sysclk_get_cpu_hz()
   }; 
   
-  pwm_init(PWM, &PWM_MCK_clock_config);
+  pwm_init(PWM, &PWM_LRCK_clock_config);
 	pwm_channel_instance.channel = PWM_CHANNEL_0;
 	pwm_channel_instance.ul_prescaler = PWM_CMR_CPRE_CLKA;
 	pwm_channel_instance.polarity = PWM_HIGH;
