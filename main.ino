@@ -23,6 +23,7 @@
 #define LED3OFF (PIOC -> PIO_CODR = PIO_PC26)
 #define LED4OFF (PIOC -> PIO_CODR = PIO_PC28)
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
+#define PWM_LRCK IOPORT_CREATE_PIN(PIOA, 23)
 
 void TC4_Handler();                                 // setup clock for tremolo/ringmodulator.
 codecTxReadyInterrupt(HiFiChannelID_t channel);
@@ -36,6 +37,16 @@ static uint32_t left_in = 0;
 static uint32_t right_in = 0;
 static uint32_t left_out = 0;
 static uint32_t right_out = 0;
+
+typedef struct {
+	/** Frequency of clock A in Hz (set 0 to turn it off) */
+	uint32_t ul_clka;
+	/** Frequency of clock B in Hz (set 0 to turn it off) */
+	uint32_t ul_clkb;
+	/** Frequency of master clock in Hz */
+	uint32_t ul_mck;;
+} pwm_clock_t;  
+  
 
 volatile char EFFECT;
 
@@ -60,7 +71,32 @@ void setup() {
   display.display();
   display.clearDisplay();
   
-  //////////////////////////  SET UP TIMER:  ////////////////////
+  //////////////////////////  PWM for LRCK 44.1 kHz 50% duty left aligned. polarity high ////////////////////////////
+
+  pio_configure_pin(PWM_MCK, PIO_TYPE_PIO_PERIPH_B);
+  pmc_enable_periph_clk(ID_PWM);
+  pwm_channel_disable(PWM, PWM_CHANNEL_0);
+   pwm_clock_t PWM_MCK_clock_config = 
+  {
+	.ul_clka = 44100,                   // set to 44.1 kHz
+	.ul_clkb = 0,
+	.ul_mck = sysclk_get_cpu_hz()
+  }; 
+  
+  pwm_init(PWM, &PWM_MCK_clock_config);
+	pwm_channel_instance.channel = PWM_CHANNEL_0;
+	pwm_channel_instance.ul_prescaler = PWM_CMR_CPRE_CLKA;
+	pwm_channel_instance.polarity = PWM_HIGH;
+	pwm_channel_instance.alignment = PWM_ALIGN_LEFT;
+	pwm_channel_instance.ul_period = 20;
+	pwm_channel_instance.ul_duty = 10;
+	//apply the channel configuration
+	pwm_channel_init(PWM, &pwm_channel_instance);
+	//configuration is complete, so enable the channel
+	pwm_channel_enable(PWM, PWM_CHANNEL_0);
+  
+/*
+  //////////////////////////  timer interrupt @ 44.1 khz :: unused  ////////////////////
   pmc_set_writeprotect(false);
   pmc_enable_periph_clk(ID_TC4);    // ID_TC4: TIMER CHANNEL 1
  
@@ -74,7 +110,8 @@ void setup() {
   TC1->TC_CHANNEL[1].TC_IDR=~TC_IER_CPCS;
  
   NVIC_EnableIRQ(TC4_IRQn);       // ID_TC4: TIMER CHANNEL 1
-
+*/
+  
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
   // set codec into reset. turn on led power indicator
@@ -152,7 +189,7 @@ void loop() {
       break;
   }
 }
-
+  
 void codecTxReadyInterrupt(HiFiChannelID_t channel)
 {
   if (channel == HIFI_CHANNEL_ID_1)
