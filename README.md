@@ -4,7 +4,8 @@ ARDUINO DUE 24-bit resolution guitar pedal.
 Cirrus CS4271 audio codec. 
 I2S Comm. with codec.
 
-CS4271 audio codec has automatic on-chip oscillator... external master clock not required.
+https://www.silabs.com/community/blog.entry.html/2016/10/18/high_quality_audiow-tiTN
+must set master clock: 11.2896 MHz    LRCLK: 44.1 kHz
 
 parts: https://www.adafruit.com/product/326
 
