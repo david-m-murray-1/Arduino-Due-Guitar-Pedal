@@ -7,7 +7,8 @@ I2S Comm. with codec.
 https://www.silabs.com/community/blog.entry.html/2016/10/18/high_quality_audiow-tiTN
 must set master clock: 11.2896 MHz    LRCLK: 44.1 kHz
 
-parts: https://www.adafruit.com/product/326
+parts: OLED SCREEN: https://www.adafruit.com/product/326
+       11.2896 MHz CRYSTAL: https://www.mouser.com/ProductDetail/IQD/LFXTAL016562Reel?qs=sGAEpiMZZMsBj6bBr9Q9aR%2FuGiDjvlISludcXAEXB8flK7hy2VGqhg%3D%3D 
 
 ASF Source Code documentation: https://asf.microchip.com/docs/latest/
 
