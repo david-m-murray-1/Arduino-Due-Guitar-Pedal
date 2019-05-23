@@ -218,7 +218,7 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   }
 }
 
-void int_DISTORTION{ 
+void int_DISTORTION(){ 
   display.clearDisplay();
   display.setTextSize(1);             // Normal 1:1 pixel scale
   display.setTextColor(WHITE);        // Draw white text
@@ -232,7 +232,7 @@ void int_DISTORTION{
   return EFFECT;
 }
 
-void int_RINGMODULATOR{
+void int_RINGMODULATOR(){
   display.clearDisplay();
   display.setTextSize(1);             // Normal 1:1 pixel scale
   display.setTextColor(WHITE);        // Draw white text
@@ -246,7 +246,7 @@ void int_RINGMODULATOR{
   return EFFECT;
 }
 
-void int_REVERB{
+void int_REVERB(){
   display.clearDisplay();
   display.setTextSize(1);             // Normal 1:1 pixel scale
   display.setTextColor(WHITE);        // Draw white text
@@ -260,7 +260,7 @@ void int_REVERB{
   return EFFECT;
 }
 
-void int_TREMOLO{
+void int_TREMOLO(){
   display.clearDisplay();
   display.setTextSize(1);             // Normal 1:1 pixel scale
   display.setTextColor(WHITE);        // Draw white text
