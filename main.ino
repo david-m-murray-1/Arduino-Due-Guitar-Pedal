@@ -73,10 +73,10 @@ void setup() {
   
   //////////////////////////  PWM for LRCK 44.1 kHz 50% duty left aligned. polarity high ////////////////////////////
 
-  pio_configure_pin(PWM_MCK, PIO_TYPE_PIO_PERIPH_B);
+  pio_configure_pin(PWM_LRCK, PIO_TYPE_PIO_PERIPH_B);
   pmc_enable_periph_clk(ID_PWM);
   pwm_channel_disable(PWM, PWM_CHANNEL_0);
-   pwm_clock_t PWM_MCK_clock_config = 
+   pwm_clock_t PWM_LRCK_clock_config = 
   {
 	.ul_clka = 44100,                   // set to 44.1 kHz
 	.ul_clkb = 0,
