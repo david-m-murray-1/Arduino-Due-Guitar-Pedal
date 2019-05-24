@@ -23,7 +23,7 @@
 #define LED3OFF (PIOC -> PIO_CODR = PIO_PC26)
 #define LED4OFF (PIOC -> PIO_CODR = PIO_PC28)
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
-#define PWM_LRCK IOPORT_CREATE_PIN(PIOA, 23)
+#define PWM_LRCK IOPORT_CREATE_PIN(PIOB, 27)
 
 void TC4_Handler();                                 // setup clock for tremolo/ringmodulator.
 codecTxReadyInterrupt(HiFiChannelID_t channel);
