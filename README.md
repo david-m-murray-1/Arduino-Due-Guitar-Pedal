@@ -4,6 +4,9 @@ ARDUINO DUE 24-bit resolution guitar pedal.
 Cirrus CS4271 audio codec. 
 I2S Comm. with codec.
 
+TODO: Create ring buffer
+https://en.wikipedia.org/wiki/Circular_buffer
+
 https://www.silabs.com/community/blog.entry.html/2016/10/18/high_quality_audiow-tiTN
 must set master clock: 11.2896 MHz    LRCLK: 44.1 kHz
 https://microchip.wdfiles.com/local--files/8bit%3Alp/crystal.png
@@ -18,21 +21,6 @@ ASF Source Code documentation: https://asf.microchip.com/docs/latest/
 
 4 digital effects: Distortion, Ring Modulator, Tremolo, and Reverb.
 
-TODO: LINEARLY NORMALIZE INPUT SIGNAL.  THEN ADD EFFECTS.
-
-TODO: MATLAB: Find TFs for effects
-  find num and denom of TF
-  find s transform
-  find z transform (fn: c2d) convert from continuous model to discrete time
-  convert to c
-
-TODO: research parameters for effects
-TODO: add potentiometers as inputs to process_samples functions for each effect
-
-DONE: OLED screen
-TODO: in C: access registers for I2C master/slave comm. with OLED screen
-
-https://stackoverflow.com/questions/56196903/how-do-i-make-an-external-interrupt-in-c-on-arduino-due-sam3x8e-using-only-t
 
 https://en.wikipedia.org/wiki/Ring_modulation
 https://en.wikibooks.org/wiki/Sound_Synthesis_Theory/Modulation_Synthesis
