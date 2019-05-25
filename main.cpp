@@ -197,14 +197,14 @@ void loop() {
 void codecTxReadyInterrupt(HiFiChannelID_t channel)
 {
   if (channel == HIFI_CHANNEL_ID_1) {
-    if (leftoutptr < (sizeof(leftout)/sizeof(leftout[0])))
+    if (left_buff_ptr < (sizeof(leftout)/sizeof(leftout[0])))
       HiFi.write(leftout[leftoutptr++]); //output next sample
     else
       HiFi.write(leftout[(sizeof(leftout)/sizeof(leftout[0]))-1]); //repeat last sample if no more
 
   } else {
-    if (rightoutptr < (sizeof(rightout)/sizeof(rightout[0])))
-      HiFi.write(rightout[rightoutptr++]); //output next sample
+    if (left_buff_ptr < (sizeof(rightout)/sizeof(rightout[0])))
+      HiFi.write(rightout[right_out_ptr++]); //output next sample
     else
       HiFi.write(rightout[(sizeof(rightout)/sizeof(rightout[0]))-1]); //repeat last sample if no more
 
