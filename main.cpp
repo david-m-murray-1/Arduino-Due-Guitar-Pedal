@@ -155,8 +155,8 @@ void loop() {
     case DISTORTION:
       setTimbre(POT2);
       setDepth(POT3);
-      left_out = DISTORTION_process_pamples(*left_in);
-      right_out = DISTORTION_process_samples(*right_in);
+      left_out = DISTORTION_process_pamples(*left_buffer);
+      right_out = DISTORTION_process_samples(*right_buffer);
       
       //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
       left_out=map(left_out,0,16777215,1,POT1);
@@ -166,8 +166,8 @@ void loop() {
     case RINGMODULATOR: 
       setFs(pot2);
       setFc(pot3);                                                  // carrier frequency
-      left_out = RINGMODULATOR_process_pamples(*left_in);
-      right_out = RINGMODULATOR_process_samples(*right_in);
+      left_out[left_buff_ptr] = RINGMODULATOR_process_pamples(*left_buffer);
+      right_out[right_buff_ptr] = RINGMODULATOR_process_samples(*right_buffer);
       
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT1);
@@ -175,8 +175,8 @@ void loop() {
       break;
       
     case REVERB:
-      left_out = REVERB_process_pamples(*left_in);
-      right_out = REVERB_process_samples(*right_in);
+      left_out = REVERB_process_pamples(*left_buffer);
+      right_out = REVERB_process_samples(*right_buffer);
       
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
@@ -184,8 +184,8 @@ void loop() {
       break;
       
     case TREMOLO:
-      left_out = TREMOLO_process_pamples(*left_in);
-      right_out = TREMOLO_process_samples(*right_in);
+      left_out = TREMOLO_process_pamples(*left_buffer);
+      right_out = TREMOLO_process_samples(*right_buffer);
       
       //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT2);
@@ -207,7 +207,6 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
       HiFi.write(rightout[right_out_ptr++]); //output next sample
     else
       HiFi.write(rightout[(sizeof(rightout)/sizeof(rightout[0]))-1]); //repeat last sample if no more
-
   }
 }
 
