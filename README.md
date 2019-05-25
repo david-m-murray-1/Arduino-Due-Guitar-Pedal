@@ -6,6 +6,7 @@ I2S Comm. with codec.
 
 DONE: Create ring buffer
 https://en.wikipedia.org/wiki/Circular_buffer
+TODO: Load index. point at this with global variable. i.e. bufptr_left & bufptr_right
 
 https://www.silabs.com/community/blog.entry.html/2016/10/18/high_quality_audiow-tiTN
 must set master clock: 11.2896 MHz    LRCLK: 44.1 kHz
