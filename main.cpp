@@ -58,8 +58,8 @@ volatile int POT0, POT1, POT2, POT3;
 
 void setup() {
   ////////////////////////// setup ring buffer   ////////////////
-  circular_buffer_left<uint32_t> circle_left(buffsize);
-  circular_buffer_right<uint32_t> circle_right(buffsize);
+  circular_buffer<uint32_t> circle_left(buffsize);
+  circular_buffer<uint32_t> circle_right(buffsize);
 		
   ////////////////////////// enable LED outputs  ////////////////
   PIOB->PIO_PER = PIO_PB25;  //Enable PIO
