@@ -1,6 +1,9 @@
 /* ARDUINO DUE GUITAR PEDAL
  * DAVID MURRAY
  */
+#include <iostream>
+#include <cstdio>
+#include "ringbuffer.h"
 #include <asf.h>
 #include <Adafruit_SSD1306.h>
 #include <splash.h>
@@ -37,6 +40,7 @@ static uint32_t left_in = 0;
 static uint32_t right_in = 0;
 static uint32_t left_out = 0;
 static uint32_t right_out = 0;
+static uint32_t buffsize = 256;
 
 typedef struct {
 	/** Frequency of clock A in Hz (set 0 to turn it off) */
@@ -53,6 +57,10 @@ volatile char EFFECT;
 volatile int POT0, POT1, POT2, POT3;
 
 void setup() {
+  ////////////////////////// setup ring buffer   ////////////////
+  circular_buffer_left<uint32_t> circle_left(buffsize);
+  circular_buffer_right<uint32_t> circle_right(buffsize);
+		
   ////////////////////////// enable LED outputs  ////////////////
   PIOB->PIO_PER = PIO_PB25;  //Enable PIO
   PIOC->PIO_PER = (PIO_PC24 | PIO_PC25 | PIO_PC26 | PIO_PC28);  //Enable PIO
@@ -195,12 +203,12 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
   if (channel == HIFI_CHANNEL_ID_1)
   {
     // Left channel
-    HiFi.write(left_out);  
+    HiFi.write(circle_left.get());  
   }
   else
   {
     // Right channel
-    HiFi.write(right_out);
+    HiFi.write(circle_right.get());
   }
 }
 
@@ -209,12 +217,12 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   if (channel == HIFI_CHANNEL_ID_1)
   {
     // Left channel
-    left_in = HiFi.read();
+    circle.put(HiFi.read());
   }
   else
   {
     // Right channel
-    right_in = HiFi.read();
+    circle.put(HiFi.read());
   }
 }
 
