@@ -169,7 +169,7 @@ void loop() {
       left_out[left_buff_ptr] = RINGMODULATOR_process_pamples(*left_buffer);
       right_out[right_buff_ptr] = RINGMODULATOR_process_samples(*right_buffer);
       
-      //adjust the volume with POT2
+   /*   //adjust the volume with POT2
       left_out=map(left_in,0,4095,1,POT1);
       right_out=map(right_in,0,4095,1,POT1);
       break;
@@ -191,6 +191,7 @@ void loop() {
       left_out=map(left_in,0,4095,1,POT2);
       right_out=map(right_in,0,4095,1,POT2);
       break;
+   */
   }
 }
   
@@ -198,15 +199,15 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 {
   if (channel == HIFI_CHANNEL_ID_1) {
     if (left_buff_ptr < (sizeof(leftout)/sizeof(leftout[0])))
-      HiFi.write(leftout[leftoutptr++]); //output next sample
+      HiFi.write(leftout[left_buff_ptrr++]); //output next sample
     else
-      HiFi.write(leftout[(sizeof(leftout)/sizeof(leftout[0]))-1]); //repeat last sample if no more
+      HiFi.write(leftout[(sizeof(left_out)/sizeof(left_out[0]))-1]); //repeat last sample if no more
 
   } else {
-    if (left_buff_ptr < (sizeof(rightout)/sizeof(rightout[0])))
+    if (left_buff_ptr < (sizeof(right_out)/sizeof(right_out[0])))
       HiFi.write(rightout[right_out_ptr++]); //output next sample
     else
-      HiFi.write(rightout[(sizeof(rightout)/sizeof(rightout[0]))-1]); //repeat last sample if no more
+      HiFi.write(rightout[(sizeof(right_out)/sizeof(right_out[0]))-1]); //repeat last sample if no more
   }
 }
 
