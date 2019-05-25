@@ -4,7 +4,7 @@ ARDUINO DUE 24-bit resolution guitar pedal.
 Cirrus CS4271 audio codec. 
 I2S Comm. with codec.
 
-TODO: Create ring buffer
+DONE: Create ring buffer
 https://en.wikipedia.org/wiki/Circular_buffer
 
 https://www.silabs.com/community/blog.entry.html/2016/10/18/high_quality_audiow-tiTN
