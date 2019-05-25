@@ -36,11 +36,9 @@ void int_RINGMODULATOR{
 void int_REVERB(); 
 void int_TREMOLO():
 
-static uint32_t left_in = 0;
-static uint32_t right_in = 0;
-static uint32_t left_out = 0;
-static uint32_t right_out = 0;
-static uint32_t buffsize = 256;
+int buffsize = 256;
+int left_out[buffsize] = {0};
+int right_out[buffsize] = {0};
 
 typedef struct {
 	/** Frequency of clock A in Hz (set 0 to turn it off) */
@@ -200,15 +198,18 @@ void loop() {
   
 void codecTxReadyInterrupt(HiFiChannelID_t channel)
 {
-  if (channel == HIFI_CHANNEL_ID_1)
-  {
-    // Left channel
-    HiFi.write(circle_left.get());  
-  }
-  else
-  {
-    // Right channel
-    HiFi.write(circle_right.get());
+  if (channel == HIFI_CHANNEL_ID_1) {
+    if (leftoutptr < (sizeof(leftout)/sizeof(leftout[0])))
+      HiFi.write(leftout[leftoutptr++]); //output next sample
+    else
+      HiFi.write(leftout[(sizeof(leftout)/sizeof(leftout[0]))-1]); //repeat last sample if no more
+
+  } else {
+    if (rightoutptr < (sizeof(rightout)/sizeof(rightout[0])))
+      HiFi.write(rightout[rightoutptr++]); //output next sample
+    else
+      HiFi.write(rightout[(sizeof(rightout)/sizeof(rightout[0]))-1]); //repeat last sample if no more
+
   }
 }
 
