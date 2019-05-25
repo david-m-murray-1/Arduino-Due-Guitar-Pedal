@@ -36,6 +36,10 @@ void int_RINGMODULATOR{
 void int_REVERB(); 
 void int_TREMOLO():
 
+int left_buffer[buffsize] = {0};
+int right_buffer[buffsize] = {0};
+int left_buff_ptr = 0;
+int right_buff_ptr = 0;
 int buffsize = 256;
 int left_out[buffsize] = {0};
 int right_out[buffsize] = {0};
@@ -218,12 +222,22 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   if (channel == HIFI_CHANNEL_ID_1)
   {
     // Left channel
-    circle.put(HiFi.read());
+    left_buffer[left_buff_ptr] = circle_left.put(HiFi.read());
+    left_buff_ptr++;
+    if (circle_left.full() == 1){
+	    circle_left.reset();
+	    left_buff_ptr = 0;
+    }
   }
   else
   {
     // Right channel
-    circle.put(HiFi.read());
+    right_buffer[right_buff_ptr] = circle_right.put(HiFi.read());
+    right_buff_ptr++;
+    if (circle_left.full() == 1){
+	    circle_right.reset();
+	    right_buff_ptr = 0;
+    }
   }
 }
 
