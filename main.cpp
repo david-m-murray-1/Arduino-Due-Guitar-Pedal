@@ -5,9 +5,6 @@
 #include <cstdio>
 #include "ringbuffer.h"
 #include <asf.h>
-#include <Adafruit_SSD1306.h>
-#include <splash.h>
-#include <Wire.h>
 #include <HiFi.h>
 #include <distortion.h>
 #include <reverb.h>
@@ -77,10 +74,7 @@ void setup() {
   enable_NVIC_interrupts();
 
   //////////////////////////      I2C        ////////////////////
-  Serial.begin(9600);
-  display.display();
-  display.clearDisplay();
-  
+// rework this section in c
   //////////////////////////  PWM for LRCK 44.1 kHz 50% duty left aligned. polarity high ////////////////////////////
 
   pio_configure_pin(PWM_LRCK, PIO_TYPE_PIO_PERIPH_B);
