@@ -10,3 +10,5 @@ TODO: Test effects on .wav file (any uncompressed data).
 Breadboard
 TODO: Test interrupts, ADCs, and audio throughput.
 Verify: MCK and SCLK.
+
+Fix up buffer. Test buffer with .wav file. Breadboard I2S
