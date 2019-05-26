@@ -47,7 +47,7 @@ typedef struct {
 	/** Frequency of clock B in Hz (set 0 to turn it off) */
 	uint32_t ul_clkb;
 	/** Frequency of master clock in Hz */
-	uint32_t ul_mck;;
+	uint32_t ul_mck;
 } pwm_clock_t;  
   
 
@@ -199,15 +199,15 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 {
   if (channel == HIFI_CHANNEL_ID_1) {
     if (left_buff_ptr < (sizeof(leftout)/sizeof(leftout[0])))
-      HiFi.write(leftout[left_buff_ptrr++]); //output next sample
+      HiFi.write(left_out[left_buff_ptrr++]); //output next sample
     else
-      HiFi.write(leftout[(sizeof(left_out)/sizeof(left_out[0]))-1]); //repeat last sample if no more
+      HiFi.write(left_out[(sizeof(left_out)/sizeof(left_out[0]))-1]); //repeat last sample if no more
 
   } else {
     if (left_buff_ptr < (sizeof(right_out)/sizeof(right_out[0])))
-      HiFi.write(rightout[right_out_ptr++]); //output next sample
+      HiFi.write(right_out[right_out_ptr++]); //output next sample
     else
-      HiFi.write(rightout[(sizeof(right_out)/sizeof(right_out[0]))-1]); //repeat last sample if no more
+      HiFi.write(right_out[(sizeof(right_out)/sizeof(right_out[0]))-1]); //repeat last sample if no more
   }
 }
 
