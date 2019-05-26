@@ -12,3 +12,5 @@ TODO: Test interrupts, ADCs, and audio throughput.
 Verify: MCK and SCLK.
 
 Fix up buffer. Test buffer with .wav file. Breadboard I2S
+
+Change map function.
