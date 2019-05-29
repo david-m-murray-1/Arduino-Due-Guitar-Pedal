@@ -16,3 +16,4 @@ Fix up buffer. Test buffer with .wav file. Breadboard I2S
 Change map function.
 
 TODO: 2-channel true analog bypass. test impedance against digital bypass.
+http://fuzzcentral.ssguitar.com/
