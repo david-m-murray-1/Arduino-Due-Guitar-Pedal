@@ -17,3 +17,4 @@ Change map function.
 
 TODO: 2-channel true analog bypass. test impedance against digital bypass.
 http://fuzzcentral.ssguitar.com/
+http://giovanettihandwired.blogspot.com/2014/02/clonare-pedali-i-forum-la-morale-e_19.html
