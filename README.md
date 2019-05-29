@@ -2,7 +2,7 @@
 
 ARDUINO DUE 24-bit resolution guitar pedal.
 I2S comm. with Cirrus CS4271 audio codec. 
-Circularly buffered.
+Circularly buffered. 48 kHz
 
 
 TODO: Test effects on .wav file (any uncompressed data).
