@@ -11,6 +11,8 @@ Nearly finished with the accompanying pedal shield schematic.
 TODO: Clamper to provide negative voltage swing for the opamp's output.
 TODO: Ultiboard footprints for parts: 3x POTs, 2x Jacks
 
+TODO: 96kHz sampling rate.
+PWM clock set to 96khz.  Change Crystal.
 
 TODO: 2-channel true analog bypass. test impedance against digital bypass.
 http://fuzzcentral.ssguitar.com/
