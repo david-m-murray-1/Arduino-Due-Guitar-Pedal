@@ -7,7 +7,9 @@ Linearly normalized across samples.
 Circularly buffered. 
 
 
-The Pedal Shield to accompany this project is nearly complete! Locating the correct parts and footprints for ultiboard!
+Nearly finished with the accompanying pedal shield schematic.
+TODO: Clamper to provide negative voltage swing for the opamp's output.
+TODO: Ultiboard footprints for parts: 3x POTs, 2x Jacks
 
 
 TODO: 2-channel true analog bypass. test impedance against digital bypass.
