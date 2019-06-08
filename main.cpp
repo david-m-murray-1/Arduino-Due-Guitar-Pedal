@@ -150,8 +150,14 @@ void loop() {
   POT1=ADC->ADC_CDR[6];                   
   POT2=ADC->ADC_CDR[5];               
   POT3=ADC->ADC_CDR[4];                  
-
-  switch (EFFECT){
+}
+  
+void codecTxReadyInterrupt(HiFiChannelID_t channel)
+{
+  if (channel == HIFI_CHANNEL_ID_1) {
+    if (left_buff_ptr < (sizeof(leftout)/sizeof(leftout[0])))
+      HiFi.write(left_out[left_buff_ptrr++]); //output next sample
+	    switch (EFFECT){
     case DISTORTION:
       setTimbre(POT2);
       setDepth(POT3);
@@ -193,21 +199,98 @@ void loop() {
       break;
    */
   }
-}
-  
-void codecTxReadyInterrupt(HiFiChannelID_t channel)
-{
-  if (channel == HIFI_CHANNEL_ID_1) {
-    if (left_buff_ptr < (sizeof(leftout)/sizeof(leftout[0])))
-      HiFi.write(left_out[left_buff_ptrr++]); //output next sample
     else
       HiFi.write(left_out[(sizeof(left_out)/sizeof(left_out[0]))-1]); //repeat last sample if no more
 
   } else {
     if (left_buff_ptr < (sizeof(right_out)/sizeof(right_out[0])))
       HiFi.write(right_out[right_out_ptr++]); //output next sample
+	    switch (EFFECT){
+    case DISTORTION:
+      setTimbre(POT2);
+      setDepth(POT3);
+      left_out = DISTORTION_process_pamples(*left_buffer);
+      right_out = DISTORTION_process_samples(*right_buffer);
+      
+      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
+      left_out=map(left_out,0,16777215,1,POT1);
+      right_out=map(right_out,0,16777215‬,1,POT1);
+      break;
+      
+    case RINGMODULATOR: 
+      setFs(pot2);
+      setFc(pot3);                                                  // carrier frequency
+      left_out[left_buff_ptr] = RINGMODULATOR_process_pamples(*left_buffer);
+      right_out[right_buff_ptr] = RINGMODULATOR_process_samples(*right_buffer);
+      
+   /*   //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT1);
+      right_out=map(right_in,0,4095,1,POT1);
+      break;
+      
+    case REVERB:
+      left_out = REVERB_process_pamples(*left_buffer);
+      right_out = REVERB_process_samples(*right_buffer);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+      
+    case TREMOLO:
+      left_out = TREMOLO_process_pamples(*left_buffer);
+      right_out = TREMOLO_process_samples(*right_buffer);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+   */
+  }
     else
       HiFi.write(right_out[(sizeof(right_out)/sizeof(right_out[0]))-1]); //repeat last sample if no more
+	    switch (EFFECT){
+    case DISTORTION:
+      setTimbre(POT2);
+      setDepth(POT3);
+      left_out = DISTORTION_process_pamples(*left_buffer);
+      right_out = DISTORTION_process_samples(*right_buffer);
+      
+      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
+      left_out=map(left_out,0,16777215,1,POT1);
+      right_out=map(right_out,0,16777215‬,1,POT1);
+      break;
+      
+    case RINGMODULATOR: 
+      setFs(pot2);
+      setFc(pot3);                                                  // carrier frequency
+      left_out[left_buff_ptr] = RINGMODULATOR_process_pamples(*left_buffer);
+      right_out[right_buff_ptr] = RINGMODULATOR_process_samples(*right_buffer);
+      
+   /*   //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT1);
+      right_out=map(right_in,0,4095,1,POT1);
+      break;
+      
+    case REVERB:
+      left_out = REVERB_process_pamples(*left_buffer);
+      right_out = REVERB_process_samples(*right_buffer);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+      
+    case TREMOLO:
+      left_out = TREMOLO_process_pamples(*left_buffer);
+      right_out = TREMOLO_process_samples(*right_buffer);
+      
+      //adjust the volume with POT2
+      left_out=map(left_in,0,4095,1,POT2);
+      right_out=map(right_in,0,4095,1,POT2);
+      break;
+   */
+  }
   }
 }
 
