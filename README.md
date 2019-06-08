@@ -2,18 +2,13 @@
 
 ARDUINO DUE 24-bit resolution guitar pedal.
 I2S comm. with Cirrus CS4271 audio codec. 
-Circularly buffered. 48 kHz
+48 kHz sampling rate.
+Linearly normalized across samples.
+Circularly buffered. 
 
 
-TODO: Test effects on .wav file (any uncompressed data).
+The Pedal Shield to accompany this project is nearly complete! Locating the correct parts and footprints for ultiboard!
 
-Breadboard
-TODO: Test interrupts, ADCs, and audio throughput.
-Verify: MCK and SCLK.
-
-Fix up buffer. Test buffer with .wav file. Breadboard I2S
-
-Change map function.
 
 TODO: 2-channel true analog bypass. test impedance against digital bypass.
 http://fuzzcentral.ssguitar.com/
