@@ -19,7 +19,3 @@ TODO: Ultiboard footprints for parts: 2x stereo jacks
 
 TODO: 96kHz sampling rate.
 PWM clock set to 96khz.  Change Crystal to 22.2MHz.
-
-TODO: 2-channel true analog bypass. test impedance against digital bypass.
-http://fuzzcentral.ssguitar.com/
-http://giovanettihandwired.blogspot.com/2014/02/clonare-pedali-i-forum-la-morale-e_19.html
