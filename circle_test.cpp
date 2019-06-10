@@ -68,8 +68,8 @@ int main(void) {
 		// stereo dynamics
 /*
  |     ,.---..._ | :::  -attack |
- |   , ': / / / o'''.| ///  - sustain |
- |    :::/ / / / oooooo`'..| ooo - release |
+ |   ,`:: / / / o'''.| ///  - sustain |
+ |  ' :::/ / / / oooooo`'..| ooo - release |
  | ,::::: / / / ooooooooo`''.| ________________ |
  | _:::::/ / / / oooooooooooo`'''.____________________time
 */
