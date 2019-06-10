@@ -2,8 +2,8 @@
 
 ARDUINO DUE 24-bit resolution guitar pedal.
 I2S comm. with Cirrus CS4271 audio codec. 
-48 kHz sampling rate.
-Linearly normalized across samples.
+96 kHz sampling rate.
+Linearly normalized across all samples.
 Circularly buffered.
 
 sample in.
@@ -12,13 +12,18 @@ Modify signal based on effect.
 Apply stereo dynamics to dynamically scale the output.
 output sample, value limited by volume POT.
 
+TODO: Footswitch to enable/disable bypass.
+TODO: finish flanger, tremolo, delay effects libraries
 
-TODO: class for stereo dynamics. class for linear normalization
-TODO: finish ringModulator header and cpp
+TODO: add footswitch to multisim and ultiboard.
+TODO: verify pins used on Arduino and re-map CS4271 with the new footprint.
+TODO: verify 28L TSSOP footprint on ultiboard
+TODO: add grounds for PCB
 
-
-Nearly finished with the accompanying pedal shield schematic.
 TODO: Ultiboard footprints for parts: 2x stereo jacks
 
-TODO: 96kHz sampling rate.
-PWM clock set to 96khz.  Change Crystal to 22.2MHz.
+TODO: Change Crystal to 22.2MHz.
+
+TODO: Metal casing for guitar pedal.
+TODO: Glass casing for guitar pedal.
+TODO: Test Hardware interface. Test codec for 48 kHz and 96 kHz.
