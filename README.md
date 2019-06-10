@@ -13,6 +13,9 @@ Apply stereo dynamics to dynamically scale the output.
 output sample, value limited by volume POT.
 
 
+TODO: class for stereo dynamics. class for linear normalization
+TODO: finish ringModulator header and cpp
+
 
 Nearly finished with the accompanying pedal shield schematic.
 TODO: Ultiboard footprints for parts: 2x stereo jacks
