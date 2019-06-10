@@ -83,7 +83,7 @@ int main(void) {
 		comp_scale = comp_slope * (comp_threshold - rms_dB);
 		// negative comp slope
 		exp_scale = exp_slope * (exp_threshold - rms_dB);
-		min_amplitude = *min_element(begin(inputbuffer), end(inputbuffer));
+		min_amplitude = *min_element(begin(outbuffer), end(outbuffer));
 		scaling_factor = pow(10, min_amplitude);
 		if (scaling_factor < gain) {
 			gain = (1 - attack) * gain + (attack * scaling_factor);
