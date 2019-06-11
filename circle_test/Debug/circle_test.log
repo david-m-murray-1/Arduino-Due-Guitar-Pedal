@@ -1,0 +1,37 @@
+﻿  circle_test.cpp
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(64): error C2065: 'POT2': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(65): error C2065: 'POT3': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(89): error C2065: 'POT2': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(90): error C2039: 'set': is not a member of 'Distortion'
+  c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\effects\distortion.h(7): note: see declaration of 'Distortion'
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(90): error C2065: 'POT3': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(95): error C2065: 'POT2': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(96): error C2065: 'POT3': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(101): error C2065: 'POT2': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\circle_test.cpp(102): error C2065: 'POT3': undeclared identifier
+  delay.cpp
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(18): error C2039: 'Delay_init': is not a member of 'Delay'
+  c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.h(9): note: see declaration of 'Delay'
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(19): error C3861: 'set_delay': identifier not found
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(20): error C3861: 'set_dfb': identifier not found
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(21): error C3861: 'set_dfw': identifier not found
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(22): error C3861: 'set_dmix': identifier not found
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(23): error C2065: 'del': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(23): error C2065: 'd_buffer': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(45): error C2556: 'void Delay::get_dfb(void)': overloaded function differs only by return type from 'double Delay::get_dfb(void)'
+  c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.h(18): note: see declaration of 'Delay::get_dfb'
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(45): error C2371: 'Delay::get_dfb': redefinition; different basic types
+  c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.h(18): note: see declaration of 'Delay::get_dfb'
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(49): error C2556: 'void Delay::set_dfw(void)': overloaded function differs only by return type from 'double Delay::set_dfw(void)'
+  c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.h(16): note: see declaration of 'Delay::set_dfw'
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(49): error C2371: 'Delay::set_dfw': redefinition; different basic types
+  c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.h(16): note: see declaration of 'Delay::set_dfw'
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(53): error C2556: 'void Delay::get_dmix(void)': overloaded function differs only by return type from 'double Delay::get_dmix(void)'
+  c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.h(20): note: see declaration of 'Delay::get_dmix'
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.cpp(53): error C2371: 'Delay::get_dmix': redefinition; different basic types
+  c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\delay.h(20): note: see declaration of 'Delay::get_dmix'
+  flanger.cpp
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\flanger.cpp(7): error C2065: 'del': undeclared identifier
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\flanger.cpp(24): error C3861: 'Delay_task': identifier not found
+c:\users\dave\desktop\code\dsp\udemy c++\code\testing buffer\circle_test\circle_test\flanger.cpp(46): error C3861: 'Delay_set_delay': identifier not found
+  Generating Code...
