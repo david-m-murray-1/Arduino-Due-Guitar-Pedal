@@ -24,26 +24,6 @@ double inputbuffer_right[345] = { 0 };
 double outputbuffer_left[345] = { 0 };
 double outputbuffer_right[345] = { 0 };
 
-int bit_depth = 32;
-
-double rms_amplitude = 0;
-double rms_width = 0.1;
-double rms_dB = 0;
-double min_amplitude = 0;
-double max_amplitude = 0;
-double comp_scale = 0;
-double comp_slope = 0.3;
-double comp_threshold = -15;
-double exp_threshold = -25;
-double exp_slope = -0.05;
-double attack = 0.05;
-double release = 0.005;
-double scaling_factor;
-double exp_scale;
-double gain = 2;
-double level = 10;
-
-
 int main(void) {
 
 	Delay Delay;
