@@ -24,6 +24,8 @@ TODO: Ultiboard footprints for parts: 2x stereo jacks
 
 TODO: Change Crystal to 22.2MHz.
 
+TODO: compile as one project solution.
+
 TODO: Metal casing for guitar pedal.
 TODO: Glass casing for guitar pedal.
 TODO: Test Hardware interface. Test codec for 48 kHz and 96 kHz.
