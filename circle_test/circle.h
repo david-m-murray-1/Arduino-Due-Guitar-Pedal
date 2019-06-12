@@ -9,7 +9,6 @@ template <class T>
 class circular_buffer {
 
 public:
-	double val_head;
 	explicit circular_buffer(size_t size) :
 		buf_(std::unique_ptr<T[]>(new T[size])),
 		max_size_(size)
