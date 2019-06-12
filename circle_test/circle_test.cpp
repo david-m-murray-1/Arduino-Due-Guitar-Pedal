@@ -12,15 +12,13 @@
 #include "flanger.h"
 #include "tremolo.h"
 #include "delay.h"
-
 #define POT2 1
 #define POT3 1
 
+using namespace std;
 
-// additional buffer to hold samples to be linearly normalized. apply normalization 
 extern double InputSignal_f32_1kHz_15kHz[345];
 
-using namespace std;
 
 int bufptr = 0;
 double inputbuffer_left[345];
