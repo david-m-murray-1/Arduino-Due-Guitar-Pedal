@@ -97,8 +97,8 @@ void setup() {
   circular_buffer<uint32_t> circle_right(buffsize);
 		
   ////////////////////////// enable LED outputs  ////////////////
-  PIOB->PIO_PER = PIO_PB25;  //Enable PIO
-  PIOC->PIO_PER = (PIO_PC24 | PIO_PC25 | PIO_PC26 | PIO_PC28);  //Enable PIO
+  PIOB->PIO_PER = PIO_PB25;  //Enable PIO_B
+  PIOC->PIO_PER = (PIO_PC24 | PIO_PC25 | PIO_PC26 | PIO_PC28);  //Enable PIO_C
 
   PIOB->PIO_OER = PIO_PB25;  //Set to OUTPUT
   PIOC->PIO_OER = (PIO_PC24 | PIO_PB25 | PIO_PC25 | PIO_PC26 | PIO_PC28);  //Set to OUTPUT
@@ -134,23 +134,6 @@ void setup() {
 	pwm_channel_init(PWM, &pwm_channel_instance);
 	//configuration is complete, so enable the channel
 	pwm_channel_enable(PWM, PWM_CHANNEL_0);
-  
-/*
-  //////////////////////////  timer interrupt @ 44.1 khz :: unused  ////////////////////
-  pmc_set_writeprotect(false);
-  pmc_enable_periph_clk(ID_TC4);    // ID_TC4: TIMER CHANNEL 1
- 
-  //we want wavesel 01 with RC 
-  TC_Configure(TC1,1, TC_CMR_WAVE | TC_CMR_WAVSEL_UP_RC | TC_CMR_TCCLKS_TIMER_CLOCK2);
-  TC_SetRC(TC1, 1, 238); // sets <> 44.1 Khz interrupt rate
-  TC_Start(TC1, 1);
- 
-  // enable timer interrupts on the timer
-  TC1->TC_CHANNEL[1].TC_IER=TC_IER_CPCS;
-  TC1->TC_CHANNEL[1].TC_IDR=~TC_IER_CPCS;
- 
-  NVIC_EnableIRQ(TC4_IRQn);       // ID_TC4: TIMER CHANNEL 1
-*/
   
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
