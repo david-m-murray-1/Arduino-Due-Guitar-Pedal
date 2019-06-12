@@ -55,7 +55,36 @@ volatile char EFFECT;
 
 volatile int POT0, POT1, POT2, POT3;
 
+/////// Effects vars ///////////////////////////////////////////////////////////////////////////////
+  int bufptr = 0;
+  double inputbuffer_left[345];
+  double inputbuffer_right[345];
+  double outputbuffer_left[345];			EFFECTS
+  double outputbuffer_right[345];
+  double min_amplitude;
+  int bit_depth = 32;
+ ////////////////////////////////////////////////////////////////////////////////////
+
 void setup() {
+
+  ////////////////////////// INITIALIZE BUFFERS  ////////////////
+  STEREO stereo_left;
+  STEREO stereo_right;
+
+  Distortion Distortion;
+  Distortion.setDepth(1);
+  Distortion.setTimbre(1);
+  RingModulator RingModulation;
+  RingModulation.setFc(440);
+  RingModulation.setFs(300);
+  Flanger Flanger;
+  Tremolo Tremolo;
+  Tremolo.setRate(POT2);
+  Tremolo.setDepth(POT3);
+	
+  circular_buffer<double> circle_left(345);
+  circular_buffer<double> circle_right(345);
+	
   ////////////////////////// setup ring buffer   ////////////////
   circular_buffer<uint32_t> circle_left(buffsize);
   circular_buffer<uint32_t> circle_right(buffsize);
@@ -156,142 +185,69 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 {
   if (channel == HIFI_CHANNEL_ID_1) {
     if (left_buff_ptr < (sizeof(leftout)/sizeof(leftout[0])))
-      HiFi.write(left_out[left_buff_ptrr++]); //output next sample
-	    switch (EFFECT){
-    case DISTORTION:
-      setTimbre(POT2);
-      setDepth(POT3);
-      left_out = DISTORTION_process_pamples(*left_buffer);
-      right_out = DISTORTION_process_samples(*right_buffer);
-      
-      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
-      left_out=map(left_out,0,16777215,1,POT1);
-      right_out=map(right_out,0,16777215‬,1,POT1);
-      break;
-      
-    case RINGMODULATOR: 
-      setFs(pot2);
-      setFc(pot3);                                                  // carrier frequency
-      left_out[left_buff_ptr] = RINGMODULATOR_process_pamples(*left_buffer);
-      right_out[right_buff_ptr] = RINGMODULATOR_process_samples(*right_buffer);
-      
-   /*   //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT1);
-      right_out=map(right_in,0,4095,1,POT1);
-      break;
-      
-    case REVERB:
-      left_out = REVERB_process_pamples(*left_buffer);
-      right_out = REVERB_process_samples(*right_buffer);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-      
-    case TREMOLO:
-      left_out = TREMOLO_process_pamples(*left_buffer);
-      right_out = TREMOLO_process_samples(*right_buffer);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-   */
-  }
-    else
-      HiFi.write(left_out[(sizeof(left_out)/sizeof(left_out[0]))-1]); //repeat last sample if no more
+	switch (Effect) {
+		case 1:
+			cout << "input before effect1: " << inputbuffer_left[bufptr] << endl;
+			Distortion.setDepth(POT2);
+			Distortion.setTimbre(POT3);
+			Distortion.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
+			//Distortion.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
+			cout << "distortion effect output: " << outputbuffer_left[bufptr] << endl;
+			break;
+		case 2:
+			RingModulation.setFc(POT2);
+			RingModulation.setFs(POT3);
+			RingModulation.process_samples(&inputbuffer_left[0], &outputbuffer_right[0], bufptr);
+			//RingModulation.process_samples(&inputbuffer_right[0], &outputbuffer_left[0], bufptr);
+			break;
+		case 3:
+			Tremolo.setRate(POT2);
+			Tremolo.setDepth(POT3);
+			Tremolo.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
+			//Tremolo.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
+			break;
+		case 4:
+			Flanger.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
+			//Flanger.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
+			break;
+		case 5:																								//////////////////// BYPASS ////////////////////////
+			outputbuffer_left[bufptr] = inputbuffer_left[bufptr];
+			cout << "case 5" << endl;
+			//outputbuffer_right[bufptr] = inputbuffer_right[bufptr];*/
+		default:
+			cout << "broken case statement: " << endl;
+			break;
+		}
+		// stereo dynamics
+/*
+ |     ,.----.._ | :::  -attack |
+ |   ,`:: / / / o'''.| ///  - sustain |
+ |  , ::::/ / / / oooooo`'..| ooo - release |
+ | ,::::: / / / ooooooooo`''.| ________________ |
+ | _:::::/ / / / oooooooooooo`'''.____________________time
+*/
+		stereo_left.calc_rms_amplitude(&outputbuffer_left[0], bufptr, stereo_left.rms_width, stereo_left.rms_amplitude);
+		stereo_left.calc_rms_dB(stereo_left.rms_amplitude, stereo_left.rms_dB);
+		// positve comp slope
+		stereo_left.calc_comp_scale(stereo_left.comp_slope, stereo_left.comp_threshold, stereo_left.rms_dB);
+		// negative comp slope
+		stereo_left.calc_exp_scale(stereo_left.exp_slope, stereo_left.exp_threshold, stereo_left.rms_dB);
+		min_amplitude = *min_element(begin(outputbuffer_left), end(outputbuffer_left));;
 
-  } else {
-    if (left_buff_ptr < (sizeof(right_out)/sizeof(right_out[0])))
-      HiFi.write(right_out[right_out_ptr++]); //output next sample
-	    switch (EFFECT){
-    case DISTORTION:
-      setTimbre(POT2);
-      setDepth(POT3);
-      left_out = DISTORTION_process_pamples(*left_buffer);
-      right_out = DISTORTION_process_samples(*right_buffer);
-      
-      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
-      left_out=map(left_out,0,16777215,1,POT1);
-      right_out=map(right_out,0,16777215‬,1,POT1);
-      break;
-      
-    case RINGMODULATOR: 
-      setFs(pot2);
-      setFc(pot3);                                                  // carrier frequency
-      left_out[left_buff_ptr] = RINGMODULATOR_process_pamples(*left_buffer);
-      right_out[right_buff_ptr] = RINGMODULATOR_process_samples(*right_buffer);
-      
-   /*   //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT1);
-      right_out=map(right_in,0,4095,1,POT1);
-      break;
-      
-    case REVERB:
-      left_out = REVERB_process_pamples(*left_buffer);
-      right_out = REVERB_process_samples(*right_buffer);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-      
-    case TREMOLO:
-      left_out = TREMOLO_process_pamples(*left_buffer);
-      right_out = TREMOLO_process_samples(*right_buffer);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-   */
-  }
-    else
-      HiFi.write(right_out[(sizeof(right_out)/sizeof(right_out[0]))-1]); //repeat last sample if no more
-	    switch (EFFECT){
-    case DISTORTION:
-      setTimbre(POT2);
-      setDepth(POT3);
-      left_out = DISTORTION_process_pamples(*left_buffer);
-      right_out = DISTORTION_process_samples(*right_buffer);
-      
-      //adjust the volume with POT1 -- 2^24 (input signal bit res.) mapped to 2^12 (adc is 12 bit res.)
-      left_out=map(left_out,0,16777215,1,POT1);
-      right_out=map(right_out,0,16777215‬,1,POT1);
-      break;
-      
-    case RINGMODULATOR: 
-      setFs(pot2);
-      setFc(pot3);                                                  // carrier frequency
-      left_out[left_buff_ptr] = RINGMODULATOR_process_pamples(*left_buffer);
-      right_out[right_buff_ptr] = RINGMODULATOR_process_samples(*right_buffer);
-      
-   /*   //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT1);
-      right_out=map(right_in,0,4095,1,POT1);
-      break;
-      
-    case REVERB:
-      left_out = REVERB_process_pamples(*left_buffer);
-      right_out = REVERB_process_samples(*right_buffer);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-      
-    case TREMOLO:
-      left_out = TREMOLO_process_pamples(*left_buffer);
-      right_out = TREMOLO_process_samples(*right_buffer);
-      
-      //adjust the volume with POT2
-      left_out=map(left_in,0,4095,1,POT2);
-      right_out=map(right_in,0,4095,1,POT2);
-      break;
-   */
-  }
-  }
+		cout << "output before dynamic scaling: " << outputbuffer_left[bufptr] << endl;
+
+		if (stereo_left.calc_scaling_factor(min_amplitude) < stereo_left.gain) {
+			stereo_left.gain = (1 - stereo_left.attack) * stereo_left.gain + (stereo_left.attack * stereo_left.calc_scaling_factor(min_amplitude));
+		} else {
+			stereo_left.gain = (1 - stereo_left.release) * stereo_left.gain + (stereo_left.release * stereo_left.calc_scaling_factor(min_amplitude));
+		}
+
+		outputbuffer_left[bufptr] = stereo_left.gain * outputbuffer_left[bufptr];
+		cout << "output buffer: " << outputbuffer_left[bufptr] << endl;
+		circle_left.put_back(outputbuffer_left[bufptr]);
+		cout << "Final output: "<< circle_left.get() << endl;
+	  
+      HiFi.write(outputbuffer_left[bufptr]); //output next sample
 }
 
 void codecRxReadyInterrupt(HiFiChannelID_t channel)
