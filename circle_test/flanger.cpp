@@ -1,10 +1,10 @@
 #include "flanger.h"
 #include "delay.h"
 
-Delay Delay;
+
 
 void Flanger::init(short effect_rate, short sampling, short maxd, short mind, double fwv, double stepd, double fbv) {
-	del.Delay_init(2, fbv, fwv, 1);
+	Delay_init(2, fbv, fwv, 1);
 	samp_freq = sampling;
 	counter = effect_rate;
 	control = 1;
@@ -21,7 +21,7 @@ void Flanger::init(short effect_rate, short sampling, short maxd, short mind, do
 that uses the delay task inside*/
 
 double Flanger::process_samples(double *inputbuffer, double *outputbuffer, int bufptr) {
-	outputbuffer[bufptr] = Delay_task(&inputbuffer[0]);
+	outputbuffer[bufptr] = Delay_task(&inputbuffer[0], &outputbuffer[0], bufptr);
 	return *outputbuffer;
 }
 

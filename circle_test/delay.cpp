@@ -15,73 +15,92 @@
 *                 |----------[d_fb]<--------|
 *******************************************************************************/
 
-void Delay::Delay_init(double delay_samples, double dfb, double dfw, double d_mix) {
-	set_delay(delay_samples);
-	set_dfb(dfb);
-	set_dfw(dfw);
-	set_dmix(d_mix);
-	del.wrtPtr = &d_buffer[MAX_BUF_SIZE-1];
+//Delay Delay;
+struct fract_delay {
+	double d_buffer[MAX_BUF_SIZE];
+	double d_mix;       /*delay blend parameter*/
+	short d_samples;	/*delay duration in samples*/
+	double d_fb;	    /*feedback volume*/
+	double d_fw;	    /*delay tap mix volume*/
+	double n_fract;     /*fractional part of the delay*/
+	double *rdPtr;      /*delay read pointer*/
+	double *wrtPtr;     /*delay write pointer*/
+} del;
+
+
+//static struct fract_delay del;
+
+void Delay_init(double delay_samples, double dfb, double dfw, double dmix) {
+	Delay_set_delay(delay_samples);
+	Delay_set_dfb(dfb);
+	Delay_set_dfw(dfw);
+	Delay_set_dmix(dmix);
+	del.wrtPtr = &del.d_buffer[MAX_BUF_SIZE-1];
 }
 		
-void Delay::set_dfb(double val) {
-	del.dfb = val;
+void Delay_set_dfb(double val) {
+	del.d_fb = val;
 }
 
-void Delay::set_dfw(double val) {
-	del.dfw = val;
+void Delay_set_dfw(double val) {
+	del.d_fw = val;
 }
 		
-void Delay::set_dmix(double val) {
+void Delay_set_dmix(double val) {
 	del.d_mix = val;
 }
 
-void Delay::set_delay(double n_delay) {
+void Delay_set_delay(double n_delay) {
 	// get integer part of delay
 	del.d_samples = (short)floor(n_delay);
 	// get the fractional part of the delay
 	del.n_fract = (n_delay - del.d_samples);
 }
 
-void Delay::get_dfb(void) {
-	return del.dfb;
+double Delay_get_dfb(void) {
+	return del.d_fb;
 }
 
-void Delay::set_dfw(void) {
-	return del.dfw;
+double Delay_get_dfw(void) {
+	return del.d_fw;
 }
 
-void Delay::get_dmix(void) {
+double Delay_get_dmix(void) {
 	return del.d_mix;
 }
 
-double Delay::Delay_task(double *inputbuffer, double *outputbuffer, int bufptr) {
+double Delay_task(double *inputbuffer, double *outputbuffer, int bufptr) {
+	double * y0;
+	double * y1;
+	double x1;
+	double x_est;
 
 	/*Calculates current read pointer position*/
 	del.rdPtr = del.wrtPtr - (short)del.d_samples;
 	/* wraps read pointer */
-	if (del.rdPtr < d_buffer) {
+	if (del.rdPtr < del.d_buffer) {
 		del.rdPtr += MAX_BUF_SIZE - 1;
 	}
 	y0 = del.rdPtr - 1;
 	y1 = MAX_BUF_SIZE - 1;
-	if (y0 < d_buffer) {
+	if (y0 < del.d_buffer) {
 		y0 += MAX_BUF_SIZE - 1;
 	}
 
 	x_est = (*(y0)-*(y1)) * del.n_fract + *(y1);
 
 	/* calculate next value to store in buffer */
-	x1 = inputbuffer[bufptr] + x_est * del.dfb;
+	x1 = inputbuffer[bufptr] + x_est * del.d_fb;
 	/* store value in buffer */
 	*(del.wrtPtr) = x1;
 
 	/* output value calculation*/
-	outputbuffer[bufptr] = x1 * del.d_mix + x_est * del.dfw;
+	outputbuffer[bufptr] = x1 * del.d_mix + x_est * del.d_fw;
 	del.wrtPtr++;
 
 	/*wrap delay write pointer*/
-	if (del.wrtPtr - &d_buffer[0] > MAX_BUF_SIZE - 1) {
-		del.wrtPtr = &d_buffer[0];
+	if (del.wrtPtr - &del.d_buffer[0] > MAX_BUF_SIZE - 1) {
+		del.wrtPtr = &del.d_buffer[0];
 	}
 
 	return *outputbuffer;
