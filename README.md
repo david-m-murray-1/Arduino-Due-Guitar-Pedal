@@ -7,6 +7,8 @@ Linearly normalized across all samples.
 Dynamically scaled, logarithmic output (dB).
 Circularly buffered.
 
+TODO: analyze input and output in matlab to verify effects and scaling.
+
 TODO: Footswitch to enable/disable bypass.
 
 TODO: add footswitch to multisim and ultiboard.
