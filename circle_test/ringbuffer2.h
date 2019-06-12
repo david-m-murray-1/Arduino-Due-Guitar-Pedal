@@ -29,15 +29,14 @@ public:
 	
 	T get_head()			// get the value at the head of the buffer
 	{
-		auto val_head = buf_[tail_];
+		auto val_head = buf_[tail_-1];
 		return val_head;
 	}
 
-	T put_back(T array_item)			// return modified get_head() value to the head of the buffer
+	void put_back(T array_item)			// return modified get_head() value to the head of the buffer
 	{
 		std::lock_guard<std::mutex> lock(mutex_);
 		buf_[head_] = array_item;
-		return 0;
 	}
 
 	T get()
