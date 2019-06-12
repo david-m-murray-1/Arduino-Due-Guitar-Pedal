@@ -1,17 +1,24 @@
 /* ARDUINO DUE GUITAR PEDAL
  * DAVID MURRAY
  */
+#include "pch.h"
 #include <iostream>
 #include <cstdio>
-#include "ringbuffer.h"
 #include <asf.h>
 #include <HiFi.h>
-#include <distortion.h>
-#include <reverb.h>
-#include <ringModulator.h>
-#include <tremolo.h>
-#include <effect.h>
 #include <ssc.h>
+#include <sstream>
+#include <vector>
+#include <stdlib.h>
+#include <algorithm>
+#include <iterator>
+#include "circle.h"
+#include "stereodynamics.h"
+#include "distortion.h"
+#include "ringModulator.h"
+#include "flanger.h"
+#include "tremolo.h"
+#include "delay.h"
 
 #define LED1ON (PIOC -> PIO_SODR = PIO_PC24)        // set output data register SODR
 #define LED2ON (PIOC -> PIO_SODR = PIO_PC25)
