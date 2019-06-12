@@ -184,7 +184,6 @@ void loop() {
 void codecTxReadyInterrupt(HiFiChannelID_t channel)
 {
   if (channel == HIFI_CHANNEL_ID_1) {
-    if (left_buff_ptr < (sizeof(leftout)/sizeof(leftout[0])))
 	switch (Effect) {
 		case 1:
 			cout << "input before effect1: " << inputbuffer_left[bufptr] << endl;
@@ -248,6 +247,7 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 		cout << "Final output: "<< circle_left.get() << endl;
 	  
       HiFi.write(outputbuffer_left[bufptr]); //output next sample
+	  
 }
 
 void codecRxReadyInterrupt(HiFiChannelID_t channel)
@@ -255,8 +255,7 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   if (channel == HIFI_CHANNEL_ID_1)
   {
     // Left channel
-    left_buffer[left_buff_ptr] = circle_left.put(HiFi.read());
-    left_buff_ptr++;
+    inputbuffer_left[left_buff_ptr] = circle_left.put(HiFi.read());
     if (circle_left.full() == 1){
 	    circle_left.reset();
 	    left_buff_ptr = 0;
@@ -265,7 +264,7 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   else
   {
     // Right channel
-    right_buffer[right_buff_ptr] = circle_right.put(HiFi.read());
+    inputbuffer_right[right_buff_ptr] = circle_right.put(HiFi.read());
     right_buff_ptr++;
     if (circle_left.full() == 1){
 	    circle_right.reset();
