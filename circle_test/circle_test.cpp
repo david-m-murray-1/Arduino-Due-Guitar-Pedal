@@ -5,13 +5,14 @@
 #include <stdlib.h>
 #include <algorithm>
 #include <iterator>
+#include "circle.h"
 #include "stereodynamics.h"
 #include "distortion.h"
-#include "ringbuffer2.h"
 #include "ringModulator.h"
 #include "flanger.h"
 #include "tremolo.h"
 #include "delay.h"
+
 #define POT2 1
 #define POT3 1
 
