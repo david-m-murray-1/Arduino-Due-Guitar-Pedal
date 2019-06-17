@@ -86,13 +86,10 @@ int main(){
   Tremolo Tremolo;
   Tremolo.setRate(POT2);
   Tremolo.setDepth(POT3);
-	
-  circular_buffer<double> circle_left(345);
-  circular_buffer<double> circle_right(345);
-	
-  ////////////////////////// setup ring buffer   ////////////////
-  circular_buffer<uint32_t> circle_left(buffsize);
-  circular_buffer<uint32_t> circle_right(buffsize);
+
+  //////////////////////////  init ring buffers  ////////////////
+  circular_buffer<double> circle_left(bit_depth);
+  circular_buffer<double> circle_right(bit_depth);
 		
   ////////////////////////// enable LED outputs  ////////////////
   PIOB->PIO_PER = PIO_PB25;  //Enable PIO_B
