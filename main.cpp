@@ -209,7 +209,7 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
  | _:::::/ / / / oooooooooooo`'''.____________________time
 */
 	  	// stereo left
-		stereo_left.calc_rms_amplitude(&outputbuffer_left[0], bufptr, stereo_left.rms_width, stereo_left.rms_amplitude);
+		stereo_left.calc_rms_amplitude(&outputbuffer_left[0], left_buff_ptr, stereo_left.rms_width, stereo_left.rms_amplitude);
 		stereo_left.calc_rms_dB(stereo_left.rms_amplitude, stereo_left.rms_dB);
 		// positve comp slope
 		stereo_left.calc_comp_scale(stereo_left.comp_slope, stereo_left.comp_threshold, stereo_left.rms_dB);
@@ -225,6 +225,7 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 	  		stereo_left.calc_rms_amplitude(&outputbuffer_left[0], bufptr, stereo_left.rms_width, stereo_left.rms_amplitude);
 		
 		// stereo right
+	  	stereo_right.calc_rms_amplitude(&outputbuffer_right[0], right_buff_ptr, stereo_right.rms_width, stereo_right.rms_amplitude);
 		stereo_right.calc_rms_dB(stereo_right.rms_amplitude, stereo_right.rms_dB);
 		// positve comp slope
 		stereo_right.calc_comp_scale(stereo_right.comp_slope, stereo_right.comp_threshold, stereo_right.rms_dB);
