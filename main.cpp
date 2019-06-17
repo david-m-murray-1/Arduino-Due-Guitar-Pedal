@@ -32,11 +32,11 @@
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
 #define PWM_LRCK IOPORT_CREATE_PIN(PIOB, 27)
 
-void TC4_Handler();                                 // setup clock for tremolo/ringmodulator.
 codecTxReadyInterrupt(HiFiChannelID_t channel);
 codecRxReadyInterrupt(HiFiChannelID_t channel);
+
 void int_DISTORTION();
-void int_RINGMODULATOR{ 
+void int_RINGMODULATOR(); 
 void int_REVERB(); 
 void int_TREMOLO():
 
@@ -44,9 +44,6 @@ int left_buffer[buffsize] = {0};
 int right_buffer[buffsize] = {0};
 int left_buff_ptr = 0;
 int right_buff_ptr = 0;
-int buffsize = 256;
-int left_out[buffsize] = {0};
-int right_out[buffsize] = {0};
 
 typedef struct {
 	/** Frequency of clock A in Hz (set 0 to turn it off) */
@@ -58,7 +55,7 @@ typedef struct {
 } pwm_clock_t;  
   
 
-volatile char EFFECT;
+volatile int EFFECT;
 
 volatile int POT0, POT1, POT2, POT3;
 
@@ -68,11 +65,12 @@ volatile int POT0, POT1, POT2, POT3;
   double inputbuffer_right[345];
   double outputbuffer_left[345];			EFFECTS
   double outputbuffer_right[345];
-  double min_amplitude;
+  double min_amplitude_left;
+  double min_amplitude_right;	
   int bit_depth = 32;
  ////////////////////////////////////////////////////////////////////////////////////
 
-void setup() {
+int main(){
 
   ////////////////////////// INITIALIZE BUFFERS  ////////////////
   STEREO stereo_left;
@@ -164,11 +162,12 @@ void setup() {
   ADC->ADC_CHER= 0xF0;       // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
 
   ///////////////////////             MAIN            //////////////////
-void loop() {
+while(1){
   POT0=ADC->ADC_CDR[7];      // read effect parameters from POTs        
   POT1=ADC->ADC_CDR[6];                   
   POT2=ADC->ADC_CDR[5];               
   POT3=ADC->ADC_CDR[4];                  
+}
 }
   
 void codecTxReadyInterrupt(HiFiChannelID_t channel)
@@ -176,35 +175,32 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
   if (channel == HIFI_CHANNEL_ID_1) {
 	switch (Effect) {
 		case 1:
-			cout << "input before effect1: " << inputbuffer_left[bufptr] << endl;
 			Distortion.setDepth(POT2);
 			Distortion.setTimbre(POT3);
 			Distortion.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
-			//Distortion.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
-			cout << "distortion effect output: " << outputbuffer_left[bufptr] << endl;
+			Distortion.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
 			break;
 		case 2:
 			RingModulation.setFc(POT2);
 			RingModulation.setFs(POT3);
 			RingModulation.process_samples(&inputbuffer_left[0], &outputbuffer_right[0], bufptr);
-			//RingModulation.process_samples(&inputbuffer_right[0], &outputbuffer_left[0], bufptr);
+			RingModulation.process_samples(&inputbuffer_right[0], &outputbuffer_left[0], bufptr);
 			break;
 		case 3:
 			Tremolo.setRate(POT2);
 			Tremolo.setDepth(POT3);
 			Tremolo.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
-			//Tremolo.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
+			Tremolo.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
 			break;
 		case 4:
 			Flanger.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
-			//Flanger.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
+			Flanger.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
 			break;
 		case 5:																								//////////////////// BYPASS ////////////////////////
 			outputbuffer_left[bufptr] = inputbuffer_left[bufptr];
-			cout << "case 5" << endl;
-			//outputbuffer_right[bufptr] = inputbuffer_right[bufptr];*/
+			outputbuffer_right[bufptr] = inputbuffer_right[bufptr];
+			break;
 		default:
-			cout << "broken case statement: " << endl;
 			break;
 		}
 		// stereo dynamics
@@ -215,29 +211,44 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
  | ,::::: / / / ooooooooo`''.| ________________ |
  | _:::::/ / / / oooooooooooo`'''.____________________time
 */
+	  	// stereo left
 		stereo_left.calc_rms_amplitude(&outputbuffer_left[0], bufptr, stereo_left.rms_width, stereo_left.rms_amplitude);
 		stereo_left.calc_rms_dB(stereo_left.rms_amplitude, stereo_left.rms_dB);
 		// positve comp slope
 		stereo_left.calc_comp_scale(stereo_left.comp_slope, stereo_left.comp_threshold, stereo_left.rms_dB);
 		// negative comp slope
 		stereo_left.calc_exp_scale(stereo_left.exp_slope, stereo_left.exp_threshold, stereo_left.rms_dB);
-		min_amplitude = *min_element(begin(outputbuffer_left), end(outputbuffer_left));;
+		min_amplitude_left = *min_element(begin(outputbuffer_left), end(outputbuffer_left));;
 
-		cout << "output before dynamic scaling: " << outputbuffer_left[bufptr] << endl;
-
-		if (stereo_left.calc_scaling_factor(min_amplitude) < stereo_left.gain) {
+		if (stereo_left.calc_scaling_factor(min_amplitude_left) < stereo_left.gain) {
 			stereo_left.gain = (1 - stereo_left.attack) * stereo_left.gain + (stereo_left.attack * stereo_left.calc_scaling_factor(min_amplitude));
 		} else {
 			stereo_left.gain = (1 - stereo_left.release) * stereo_left.gain + (stereo_left.release * stereo_left.calc_scaling_factor(min_amplitude));
 		}
+	  		stereo_left.calc_rms_amplitude(&outputbuffer_left[0], bufptr, stereo_left.rms_width, stereo_left.rms_amplitude);
+		
+		// stereo right
+		stereo_right.calc_rms_dB(stereo_right.rms_amplitude, stereo_right.rms_dB);
+		// positve comp slope
+		stereo_right.calc_comp_scale(stereo_right.comp_slope, stereo_right.comp_threshold, stereo_right.rms_dB);
+		// negative comp slope
+		stereo_right.calc_exp_scale(stereo_right.exp_slope, stereo_right.exp_threshold, stereo_right.rms_dB);
+		min_amplitude_right = *min_element(begin(outputbuffer_right), end(outputbuffer_right);;
 
+		if (stereo_right.calc_scaling_factor(min_amplitude_right) < stereo_right.gain) {
+			stereo_right.gain = (1 - stereo_right.attack) * stereo_right.gain + (stereo_right.attack * stereo_right.calc_scaling_factor(min_amplitude));
+		}
+		else {
+		stereo_right.gain = (1 - stereo_right.release) * stereo_right.gain + (stereo_right.release * stereo_right.calc_scaling_factor(min_amplitude));
+		}
+						   
 		outputbuffer_left[bufptr] = stereo_left.gain * outputbuffer_left[bufptr];
-		cout << "output buffer: " << outputbuffer_left[bufptr] << endl;
-		circle_left.put_back(outputbuffer_left[bufptr]);
-		cout << "Final output: "<< circle_left.get() << endl;
+		outputbuffer_right[bufptr] = stereo_right.gain * outputbuffer_right[bufptr];
+		circle_left.put_back(outputbuffer_right[bufptr]);	   
+		circle_right.put_back(outputbuffer_left[bufptr]);
 	  
-      HiFi.write(outputbuffer_left[bufptr]); //output next sample
-	  
+     		HiFi.write(outputbuffer_left[bufptr]); //output next sample
+      		HiFi.write(outputbuffer_right[bufptr]); //output next sample
 }
 
 void codecRxReadyInterrupt(HiFiChannelID_t channel)
@@ -245,7 +256,7 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   if (channel == HIFI_CHANNEL_ID_1)
   {
     // Left channel
-    inputbuffer_left[left_buff_ptr] = circle_left.put(HiFi.read());
+    inputbuffer_left[left_buff_ptr++] = circle_left.put(HiFi.read());
     if (circle_left.full() == 1){
 	    circle_left.reset();
 	    left_buff_ptr = 0;
@@ -254,7 +265,7 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
   else
   {
     // Right channel
-    inputbuffer_right[right_buff_ptr] = circle_right.put(HiFi.read());
+    inputbuffer_right[right_buff_ptr++] = circle_right.put(HiFi.read());
     right_buff_ptr++;
     if (circle_left.full() == 1){
 	    circle_right.reset();
@@ -264,58 +275,38 @@ void codecRxReadyInterrupt(HiFiChannelID_t channel)
 }
 
 void int_DISTORTION(){ 
-  display.clearDisplay();
-  display.setTextSize(1);             // Normal 1:1 pixel scale
-  display.setTextColor(WHITE);        // Draw white text
-  display.setCursor(0,0);             // Start at top-left corner
-  display.println(F("DISTORTION"));
   LED1ON;
   LED2OFF;
   LED3OFF;
   LED4OFF;
-  EFFECT = DISTORTION;
+  EFFECT = 1;
   return EFFECT;
 }
 
-void int_RINGMODULATOR(){
-  display.clearDisplay();
-  display.setTextSize(1);             // Normal 1:1 pixel scale
-  display.setTextColor(WHITE);        // Draw white text
-  display.setCursor(0,0);             // Start at top-left corner
-  display.println(F("RINGMODULATOR"));
+void int_RingModulator(){
   LED1OFF;
   LED2ON;
   LED3OFF;
   LED4OFF;
-  EFFECT = RINGMODULATOR;
-  return EFFECT;
-}
-
-void int_REVERB(){
-  display.clearDisplay();
-  display.setTextSize(1);             // Normal 1:1 pixel scale
-  display.setTextColor(WHITE);        // Draw white text
-  display.setCursor(0,0);             // Start at top-left corner
-  display.println(F("REVERB"));
-  LED1OFF;
-  LED2OFF;
-  LED3ON;
-  LED4OFF;
-  EFFECT = REVERB;
+  EFFECT = 2;
   return EFFECT;
 }
 
 void int_TREMOLO(){
-  display.clearDisplay();
-  display.setTextSize(1);             // Normal 1:1 pixel scale
-  display.setTextColor(WHITE);        // Draw white text
-  display.setCursor(0,0);             // Start at top-left corner
-  display.println(F("TREMOLO"));
   LED1OFF;
   LED2OFF;
   LED3OFF;
   LED4ON;
-  EFFECT = TREMOLO;
+  EFFECT = 3;
+  return EFFECT;
+}
+	
+void int_Flanger(){
+  LED1OFF;
+  LED2OFF;
+  LED3ON;
+  LED4OFF;
+  EFFECT = 4;
   return EFFECT;
 }
 
