@@ -9,8 +9,6 @@ Circularly buffered.
 
 TODO: analyze input and output in matlab to verify effects and scaling.
 
-TODO: access subsystem to create all interrupts on port c.
-
 TODO: Footswitch to enable/disable bypass.
 
 TODO: add footswitch to multisim and ultiboard.
