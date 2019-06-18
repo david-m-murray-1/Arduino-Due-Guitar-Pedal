@@ -310,7 +310,7 @@ void int_Flanger(){
 						  					   
 void enable_NVIC_interrupts(){
 
-  // PORT B NVIC
+  // PORT C NVIC
   pmc_enable_periph_clk(ID_PIOC);
   pio_set_input(PIOC, PIO_PC23, PIO_PULLUP;
   pio_handler_set(PIOC, ID_PIOC, PIO_PC23, PIO_IT_EDGE, int_TREMOLO);
