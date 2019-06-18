@@ -306,34 +306,30 @@ void int_Flanger(){
   LED4OFF;
   EFFECT = 4;
   return EFFECT;
-}
-
+}						
+						  					   
 void enable_NVIC_interrupts(){
-// PORT A NVIC
-  pmc_enable_periph_clk(ID_PIOA);
-  pio_set_input(PIOA, PIO_PA29, PIO_PULLUP;
-  pio_handler_set(PIOA, ID_PIOC, PIO_PA29, PIO_IT_EDGE, int_RINGMODULATOR);
-  pio_enable_interrupt(PIOA, PIO_PA29);
-  NVIC_EnableIRQ(PIOA_IRQn);
 
-// PORT B NVIC
-  pmc_enable_periph_clk(ID_PIOB);
-  pio_set_input(PIOB, PIO_PB25, PIO_PULLUP;
-  pio_handler_set(PIOB, ID_PIOB, PIO_PB25, PIO_IT_EDGE, int_TREMOLO);
-  pio_enable_interrupt(PIOB, PIO_PB25);
-  NVIC_EnableIRQ(PIOB_IRQn);
-
-// PORT C NVIC
+  // PORT B NVIC
   pmc_enable_periph_clk(ID_PIOC);
-  pio_set_input(PIOC, PIO_PC22, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC22, PIO_IT_EDGE, int_DISTORTION);
-  pio_enable_interrupt(PIOC, PIO_PC22);
+  pio_set_input(PIOC, PIO_PC23, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC23, PIO_IT_EDGE, int_TREMOLO);
+  pio_enable_interrupt(PIOC, PIO_PC23);
+  NVIC_EnableIRQ(PIOC_IRQn);
+		
+  pio_set_input(PIOC, PIO_PC24, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC24, PIO_IT_EDGE, int_RINGMODULATOR);
+  pio_enable_interrupt(PIOC, PIO_PC24);
   NVIC_EnableIRQ(PIOC_IRQn);
 
-// PORT D NVIC
-  pmc_enable_periph_clk(ID_PIOD);
-  pio_set_input(PIOD, PIO_PD7, PIO_PULLUP;
-  pio_handler_set(PIOD, ID_PIOD, PIO_PD7, PIO_IT_EDGE, int_REVERB);
-  pio_enable_interrupt(PIOD, PIO_PD7);
-  NVIC_EnableIRQ(PIOD_IRQn);
+  pio_set_input(PIOC, PIO_PC25, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC25, PIO_IT_EDGE, int_DISTORTION);
+  pio_enable_interrupt(PIOC, PIO_PC25);
+  NVIC_EnableIRQ(PIOC_IRQn);
+
+  pio_set_input(PIOC, PIO_PC26, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_P, PIO_IT_EDGE, int_REVERB);
+  pio_enable_interrupt(PIOC, PIO_PC26);
+  NVIC_EnableIRQ(PIOC_IRQn);
 }  
+		
