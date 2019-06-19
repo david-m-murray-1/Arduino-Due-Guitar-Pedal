@@ -60,7 +60,8 @@ volatile int EFFECT;
 volatile int POT0, POT1, POT2, POT3;
 
 /////// Effects vars ///////////////////////////////////////////////////////////////////////////////
-  int bufptr = 0;
+  int left_buff_ptr = 0;
+  int right_buff_ptr = 0;
   double inputbuffer_left[345];
   double inputbuffer_right[345];
   double outputbuffer_left[345];			EFFECTS
@@ -113,7 +114,7 @@ int main(){
   pwm_channel_disable(PWM, PWM_CHANNEL_0);
    pwm_clock_t PWM_LRCK_clock_config = 
   {
-	.ul_clka = 96000,                   // set to 44.1 kHz
+	.ul_clka = 96000,                   // set to 96 kHz
 	.ul_clkb = 0,
 	.ul_mck = sysclk_get_cpu_hz()
   }; 
@@ -174,28 +175,28 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 		case 1:
 			Distortion.setDepth(POT2);
 			Distortion.setTimbre(POT3);
-			Distortion.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
-			Distortion.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
+			Distortion.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], left_buff_ptr);
+			Distortion.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
 			break;
 		case 2:
 			RingModulation.setFc(POT2);
 			RingModulation.setFs(POT3);
-			RingModulation.process_samples(&inputbuffer_left[0], &outputbuffer_right[0], bufptr);
-			RingModulation.process_samples(&inputbuffer_right[0], &outputbuffer_left[0], bufptr);
+			RingModulation.process_samples(&inputbuffer_left[0], &outputbuffer_right[0], left_buff_ptr);
+			RingModulation.process_samples(&inputbuffer_right[0], &outputbuffer_left[0], right_buff_ptr);
 			break;
 		case 3:
 			Tremolo.setRate(POT2);
 			Tremolo.setDepth(POT3);
-			Tremolo.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
-			Tremolo.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
+			Tremolo.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], left_buff_ptr);
+			Tremolo.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
 			break;
 		case 4:
-			Flanger.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], bufptr);
-			Flanger.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], bufptr);
+			Flanger.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], left_buff_ptr);
+			Flanger.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
 			break;
 		case 5:																								//////////////////// BYPASS ////////////////////////
-			outputbuffer_left[bufptr] = inputbuffer_left[bufptr];
-			outputbuffer_right[bufptr] = inputbuffer_right[bufptr];
+			outputbuffer_left[left_buff_ptr] = inputbuffer_left[left_buff_ptr];
+			outputbuffer_right[right_buff_ptr] = inputbuffer_right[right_buff_ptr];
 			break;
 		default:
 			break;
@@ -312,24 +313,24 @@ void enable_NVIC_interrupts(){
 
   // PORT C NVIC
   pmc_enable_periph_clk(ID_PIOC);
-  pio_set_input(PIOC, PIO_PC23, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC23, PIO_IT_EDGE, int_TREMOLO);
-  pio_enable_interrupt(PIOC, PIO_PC23);
+  pio_set_input(PIOC, PIO_PC29, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC29, PIO_IT_EDGE, int_TREMOLO);
+  pio_enable_interrupt(PIOC, PIO_PC29);
   NVIC_EnableIRQ(PIOC_IRQn);
 		
-  pio_set_input(PIOC, PIO_PC24, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC24, PIO_IT_EDGE, int_RINGMODULATOR);
-  pio_enable_interrupt(PIOC, PIO_PC24);
+  pio_set_input(PIOC, PIO_PC21, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC21, PIO_IT_EDGE, int_RINGMODULATOR);
+  pio_enable_interrupt(PIOC, PIO_PC21);
   NVIC_EnableIRQ(PIOC_IRQn);
 
-  pio_set_input(PIOC, PIO_PC25, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC25, PIO_IT_EDGE, int_DISTORTION);
-  pio_enable_interrupt(PIOC, PIO_PC25);
+  pio_set_input(PIOC, PIO_PC22, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC22, PIO_IT_EDGE, int_DISTORTION);
+  pio_enable_interrupt(PIOC, PIO_PC22);
   NVIC_EnableIRQ(PIOC_IRQn);
 
-  pio_set_input(PIOC, PIO_PC26, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_P, PIO_IT_EDGE, int_REVERB);
-  pio_enable_interrupt(PIOC, PIO_PC26);
+  pio_set_input(PIOC, PIO_PC23, PIO_PULLUP;
+  pio_handler_set(PIOC, ID_PIOC, PIO_P23, PIO_IT_EDGE, int_REVERB);
+  pio_enable_interrupt(PIOC, PIO_PC23);
   NVIC_EnableIRQ(PIOC_IRQn);
 }  
 		
