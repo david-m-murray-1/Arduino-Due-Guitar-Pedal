@@ -104,11 +104,8 @@ int main(){
 
   ////////////////////////// External Interrupts ////////////////
   enable_NVIC_interrupts();
-
-  //////////////////////////      I2C        ////////////////////
-// rework this section in c
-  //////////////////////////  PWM for LRCK 44.1 kHz 50% duty left aligned. polarity high ////////////////////////////
-
+  
+  //////////////////////////  Left-Right Clock (LRCK)  //////////
   pio_configure_pin(PWM_LRCK, PIO_TYPE_PIO_PERIPH_B);
   pmc_enable_periph_clk(ID_PWM);
   pwm_channel_disable(PWM, PWM_CHANNEL_0);
@@ -241,13 +238,13 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 		stereo_right.gain = (1 - stereo_right.release) * stereo_right.gain + (stereo_right.release * stereo_right.calc_scaling_factor(min_amplitude));
 		}
 						   
-		outputbuffer_left[bufptr] = stereo_left.gain * outputbuffer_left[bufptr];
-		outputbuffer_right[bufptr] = stereo_right.gain * outputbuffer_right[bufptr];
-		circle_left.put_back(outputbuffer_right[bufptr]);	   
-		circle_right.put_back(outputbuffer_left[bufptr]);
+		outputbuffer_left[left_buff_ptr] = stereo_left.gain * outputbuffer_left[bufptr];
+		outputbuffer_right[right_buff_ptr] = stereo_right.gain * outputbuffer_right[bufptr];
+		circle_left.put_back(outputbuffer_right[left_buff_ptr]);	   
+		circle_right.put_back(outputbuffer_left[right_buff_ptr]);
 	  
-     		HiFi.write(outputbuffer_left[bufptr]); //output next sample
-      		HiFi.write(outputbuffer_right[bufptr]); //output next sample
+     		HiFi.write(circle_left.get()); //output next sample
+      		HiFi.write(circle_right.get()); //output next sample
 }
 
 void codecRxReadyInterrupt(HiFiChannelID_t channel)
