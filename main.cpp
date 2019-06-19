@@ -132,7 +132,7 @@ int main(){
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
   // set codec into reset. turn on led power indicator
-  PIOC -> PIO_CODR = PIO_PC21;     
+  PIOC -> PIO_CODR = PIO_PC23;     
   LED5;
   // Configure transmitter for 2 channels, external TK/TF clocks, 32 bit per
   // channel (data less than 32-bit is left justified in the 32 bit word, but
@@ -146,7 +146,7 @@ int main(){
   HiFi.onRxReady(codecRxReadyInterrupt);
 
   // release codec from reset
-  PIOC -> PIO_SODR = PIO_PC21;     // digitalWrite(7,HIGH);
+  PIOC -> PIO_SODR = PIO_PC23;     
   // Enable both receiver and transmitter.
   HiFi.enableRx(true);
   HiFi.enableTx(true);
@@ -305,30 +305,46 @@ void int_Flanger(){
   LED4OFF;
   EFFECT = 4;
   return EFFECT;
-}						
+}
+						   
+void int_BYPASS(){
+  LED1OFF;
+  LED2OFF;
+  LED3OFF;
+  LED4OFF;
+  EFFECT = 5;
+  return EFFECT;
+}	
 						  					   
 void enable_NVIC_interrupts(){
 
+  // PORT D NVIC
+  pmc_enable_periph_clk(ID_PIOD);
+  pio_set_input(PIOD, PIO_PD8, PIO_PULLUP);
+  pio_handler_set(PIOD, ID_PIOD, PIO_PD8, PIO_IT_EDGE, int_BYPASS);
+  pio_enable_interrupt(PIOC, PIO_PD8);
+  NVIC_EnableIRQ(PIOD_IRQn);
+  
+  pio_set_input(PIOD, PIO_PD7, PIO_PULLUP);
+  pio_handler_set(PIOD, ID_PIOD, PIO_PD7, PIO_IT_EDGE, int_TREMOLO);
+  pio_enable_interrupt(PIOD, PIO_PD7);
+  NVIC_EnableIRQ(PIOD_IRQn);
+  
   // PORT C NVIC
   pmc_enable_periph_clk(ID_PIOC);
-  pio_set_input(PIOC, PIO_PC29, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC29, PIO_IT_EDGE, int_TREMOLO);
+  pio_set_input(PIOC, PIO_PC29, PIO_PULLUP);
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC29, PIO_IT_EDGE, int_RINGMODULATOR);
   pio_enable_interrupt(PIOC, PIO_PC29);
   NVIC_EnableIRQ(PIOC_IRQn);
-		
-  pio_set_input(PIOC, PIO_PC21, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC21, PIO_IT_EDGE, int_RINGMODULATOR);
+
+  pio_set_input(PIOC, PIO_PC21, PIO_PULLUP);
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC21, PIO_IT_EDGE, int_DISTORTION);
   pio_enable_interrupt(PIOC, PIO_PC21);
   NVIC_EnableIRQ(PIOC_IRQn);
 
-  pio_set_input(PIOC, PIO_PC22, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_PC22, PIO_IT_EDGE, int_DISTORTION);
+  pio_set_input(PIOC, PIO_PC22, PIO_PULLUP);
+  pio_handler_set(PIOC, ID_PIOC, PIO_PC22, PIO_IT_EDGE, int_REVERB);
   pio_enable_interrupt(PIOC, PIO_PC22);
-  NVIC_EnableIRQ(PIOC_IRQn);
-
-  pio_set_input(PIOC, PIO_PC23, PIO_PULLUP;
-  pio_handler_set(PIOC, ID_PIOC, PIO_P23, PIO_IT_EDGE, int_REVERB);
-  pio_enable_interrupt(PIOC, PIO_PC23);
   NVIC_EnableIRQ(PIOC_IRQn);
 }  
 		
