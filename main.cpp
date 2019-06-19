@@ -1,5 +1,6 @@
 /* ARDUINO DUE GUITAR PEDAL
  * DAVID MURRAY
+ * Include .hpp and .cpp files used when compiling with Arduino IDE.
  */
 #include "pch.h"
 #include <iostream>
