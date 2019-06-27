@@ -41,11 +41,6 @@ void int_RINGMODULATOR();
 void int_REVERB(); 
 void int_TREMOLO():
 
-int left_buffer[buffsize] = {0};
-int right_buffer[buffsize] = {0};
-int left_buff_ptr = 0;
-int right_buff_ptr = 0;
-
 typedef struct {
 	/** Frequency of clock A in Hz (set 0 to turn it off) */
 	uint32_t ul_clka;
