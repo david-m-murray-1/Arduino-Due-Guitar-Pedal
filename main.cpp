@@ -14,12 +14,7 @@
 #include <algorithm>
 #include <iterator>
 #include "circle.h"
-#include "stereodynamics.h"
-#include "distortion.h"
-#include "ringModulator.h"
-#include "flanger.h"
-#include "tremolo.h"
-#include "delay.h"
+#include "Effect.h"
 
 #define LED1ON (PIOC -> PIO_SODR = PIO_PC24)        // set output data register SODR
 #define LED2ON (PIOC -> PIO_SODR = PIO_PC25)
@@ -53,7 +48,7 @@ typedef struct {
 
 volatile int EFFECT;
 
-volatile int POT0, POT1, POT2, POT3;
+volatile int POT0, POT1;
 
 /////// Effects vars ///////////////////////////////////////////////////////////////////////////////
   int left_buff_ptr = 0;
