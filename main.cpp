@@ -126,9 +126,6 @@ int main(){
   // channel (data less than 32-bit is left justified in the 32 bit word, but
   // codec config needs 32 clocks per channel).
   HiFi.configureTx(HIFI_AUDIO_MODE_STEREO, HIFI_CLK_MODE_USE_EXT_CLKS, 32);
-
-  // Same config as above, except sync the receiver to transmitter (RK/RF
-  // clock signals not needed)
   HiFi.configureRx(HIFI_AUDIO_MODE_STEREO, HIFI_CLK_MODE_USE_TK_RK_CLK, 32);
   HiFi.onTxReady(codecTxReadyInterrupt);
   HiFi.onRxReady(codecRxReadyInterrupt);
