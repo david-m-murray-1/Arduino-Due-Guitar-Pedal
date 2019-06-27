@@ -148,15 +148,18 @@ int main(){
 
   ///////////////////////     ADC POTENTIOMETERS      //////////////////
   //ADC Configuration
+  ADC->ADC_CR = ADC_CR_SWRST;                           // Reset ADC
+
+
   ADC->ADC_MR |= 0x80;       // adc: free running mode
   ADC->ADC_CR= 0x02;         // start adc conversion
-  ADC->ADC_CHER= __________;       // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
+  ADC->ADC_CHER = ADC_CHER_CH6; 
+  ADC->ADC_CHER = ADC_CHER_CH7; 
 
   ///////////////////////             MAIN            //////////////////
 while(1){
-  POT0=ADC->ADC_CDR[7];      // read effect parameters from POTs        
-  POT1=ADC->ADC_CDR[6];                   
-  POT2=ADC->ADC_CDR[5];               
+  POT0=ADC->ADC_CDR[6];      // read effect parameters from POTs        
+  POT1=ADC->ADC_CDR[7];                   
 }
 }
   
@@ -165,20 +168,20 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
   if (channel == HIFI_CHANNEL_ID_1) {
 	switch (Effect) {
 		case 1:
-			Distortion.setDepth(POT2);
-			Distortion.setTimbre(POT3);
+			Distortion.setDepth(POT0);
+			Distortion.setTimbre(POT1);
 			Distortion.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], left_buff_ptr);
 			Distortion.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
 			break;
 		case 2:
-			RingModulation.setFc(POT2);
-			RingModulation.setFs(POT3);
+			RingModulation.setFc(POT0);
+			RingModulation.setFs(POT1);
 			RingModulation.process_samples(&inputbuffer_left[0], &outputbuffer_right[0], left_buff_ptr);
 			RingModulation.process_samples(&inputbuffer_right[0], &outputbuffer_left[0], right_buff_ptr);
 			break;
 		case 3:
-			Tremolo.setRate(POT2);
-			Tremolo.setDepth(POT3);
+			Tremolo.setRate(POT0);
+			Tremolo.setDepth(POT1);
 			Tremolo.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], left_buff_ptr);
 			Tremolo.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
 			break;
