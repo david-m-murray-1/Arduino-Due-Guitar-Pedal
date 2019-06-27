@@ -79,10 +79,8 @@ int main(){
   RingModulator RingModulation;
   RingModulation.setFc(440);
   RingModulation.setFs(300);
-  Flanger Flanger;
   Tremolo Tremolo;
-  Tremolo.setRate(POT2);
-  Tremolo.setDepth(POT3);
+  Flanger Flanger;
 
   //////////////////////////  init ring buffers  ////////////////
   circular_buffer<double> circle_left(bit_depth);
