@@ -142,11 +142,9 @@ int main(){
   ///////////////////////     ADC POTENTIOMETERS      //////////////////
   //ADC Configuration
   ADC->ADC_CR = ADC_CR_SWRST;                           // Reset ADC
-
-
-  ADC->ADC_MR |= 0x80;       // adc: free running mode
-  ADC->ADC_CR= 0x02;         // start adc conversion
-  ADC->ADC_CHER = ADC_CHER_CH6; 
+  ADC->ADC_MR |= 0x80;      				// adc: free running mode
+  ADC->ADC_CR= 0x02;         				// start adc conversion
+  ADC->ADC_CHER = ADC_CHER_CH6; 			// adc channel 6 & 7
   ADC->ADC_CHER = ADC_CHER_CH7; 
 
   ///////////////////////             MAIN            //////////////////
