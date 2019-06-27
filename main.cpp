@@ -150,14 +150,13 @@ int main(){
   //ADC Configuration
   ADC->ADC_MR |= 0x80;       // adc: free running mode
   ADC->ADC_CR= 0x02;         // start adc conversion
-  ADC->ADC_CHER= 0xF0;       // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
+  ADC->ADC_CHER= __________;       // Enable ADC channels ch7-A0, ch6-A1, ch5-A2, ch4-A3  
 
   ///////////////////////             MAIN            //////////////////
 while(1){
   POT0=ADC->ADC_CDR[7];      // read effect parameters from POTs        
   POT1=ADC->ADC_CDR[6];                   
   POT2=ADC->ADC_CDR[5];               
-  POT3=ADC->ADC_CDR[4];                  
 }
 }
   
