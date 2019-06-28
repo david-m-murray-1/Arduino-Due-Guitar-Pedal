@@ -7,6 +7,8 @@ Linearly normalized across all samples.
 Dynamically scaled, logarithmic output (dB).
 Circularly buffered.
 
+Sine table for flanger.
+
 TODO: test analog output buffers. cannot use negative voltage rails with arduino.
 
 TODO: Metal casing for guitar pedal.
