@@ -3,10 +3,15 @@
 ARDUINO DUE 24-bit resolution guitar pedal.
 I2S comm. with Cirrus CS4271 audio codec. 
 96 kHz sampling rate.
-Linearly normalized across all samples.
-Dynamically scaled, logarithmic output (dB).
+RMS normalization across all samples at the output
+Dynamically scaled (dynamic range compression), logarithmic output (dB).
 Circularly buffered.
 
+may apply normalization to the input instead of the output.  Or at both places.  I.e.: Linearly scale, then RMS scaling at the end.
+
+Dynamic Range Compression:
+  Reduces the volume of loud sounds or amplifies quiet sounds thus reducing or compressing an audio signal's dynamic range.
+  
 Sine table for flanger.
 
 TODO: test analog output buffers. cannot use negative voltage rails with arduino.
