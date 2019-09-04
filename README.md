@@ -3,8 +3,7 @@
 ARDUINO DUE 24-bit resolution guitar pedal.
 I2S comm. with Cirrus CS4271 audio codec. 
 96 kHz sampling rate.
-RMS normalization across all samples at the output
-Dynamically scaled (dynamic range compression), logarithmic output (dB).
+Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
 
 may apply normalization to the input instead of the output.  Or at both places.  I.e.: Linearly scale, then RMS scaling at the end.
