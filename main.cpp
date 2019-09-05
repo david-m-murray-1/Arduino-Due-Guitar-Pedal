@@ -291,25 +291,11 @@ void int_Flanger(){
   EFFECT = 4;
   return EFFECT;
 }
-						   
-void int_BYPASS(){
-  LED1OFF;
-  LED2OFF;
-  LED3OFF;
-  LED4OFF;
-  EFFECT = 5;
-  return EFFECT;
-}	
 						  					   
 void enable_NVIC_interrupts(){
 
   // PORT D NVIC
   pmc_enable_periph_clk(ID_PIOD);
-  pio_set_input(PIOD, PIO_PD8, PIO_PULLUP);
-  pio_handler_set(PIOD, ID_PIOD, PIO_PD8, PIO_IT_EDGE, int_BYPASS);
-  pio_enable_interrupt(PIOC, PIO_PD8);
-  NVIC_EnableIRQ(PIOD_IRQn);
-  
   pio_set_input(PIOD, PIO_PD7, PIO_PULLUP);
   pio_handler_set(PIOD, ID_PIOD, PIO_PD7, PIO_IT_EDGE, int_TREMOLO);
   pio_enable_interrupt(PIOD, PIO_PD7);
