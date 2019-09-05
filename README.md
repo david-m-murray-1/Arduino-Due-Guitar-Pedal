@@ -5,7 +5,7 @@ I2S comm. with Cirrus CS4271 audio codec.
 96 kHz sampling rate.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
-True bypass with 3PDT switch and LED bypass indicator.
+True bypass with 3PDT switch and LED bypass indicator. test with/without
 
 may apply normalization to the input instead of the output.  Or at both places.  I.e.: Linearly scale, then RMS scaling at the end.
 
