@@ -2,7 +2,7 @@
 
 ARDUINO DUE 24-bit resolution guitar pedal.
 I2S comm. with Cirrus CS4271 audio codec. 
-96 kHz sampling rate.
+48 kHz sampling rate.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
 True bypass with 3PDT switch and LED bypass indicator. test with/without
