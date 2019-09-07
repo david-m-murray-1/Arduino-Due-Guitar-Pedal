@@ -8,6 +8,7 @@ Circularly buffered.
 True bypass with 3PDT switch and LED bypass indicator. test with/without as the switch only uses one channel
 
 may apply normalization to the input instead of the output.  Or at both places.  I.e.: Linearly scale, then RMS scaling at the end.
+-Test to see which pedal effects benefit from compression
 
 Dynamic Range Compression:
   Reduces the volume of loud sounds or amplifies quiet sounds thus reducing or compressing an audio signal's dynamic range.
