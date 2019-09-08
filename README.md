@@ -7,6 +7,7 @@ Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (
 Circularly buffered.
 True bypass with 3PDT switch and LED bypass indicator.
 
+TODO: Sine tables for effects to get rid of sine computation
 
 TODO: I2C for OLED screen.
 
