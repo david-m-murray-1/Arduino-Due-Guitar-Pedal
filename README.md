@@ -5,6 +5,9 @@ I2S comm. with Cirrus CS4271 audio codec.
 48 kHz sampling rate.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
+
+To use this code, refer to: http://www.cloud-rocket.com/2014/05/programming-arduino-due-atmel-studio-asf/ to compile the sketch with its libraries.
+
 True bypass with 3PDT switch and LED bypass indicator.
 
 TODO: Sine tables for effects to get rid of sine computation during play
