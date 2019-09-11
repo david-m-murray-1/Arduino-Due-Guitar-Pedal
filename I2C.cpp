@@ -1,3 +1,5 @@
+#define SLAVE_ADDRESS 0x3C
+
 int main(){
 
   sysclk_init();
