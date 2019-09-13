@@ -100,7 +100,7 @@ int main(){
   pwm_channel_disable(PWM, PWM_CHANNEL_0);
    pwm_clock_t PWM_LRCK_clock_config = 
   {
-	.ul_clka = 96000,                   // set to 96 kHz
+	.ul_clka = 48000,                   // set to 48 kHz
 	.ul_clkb = 0,
 	.ul_mck = sysclk_get_cpu_hz()
   }; 
