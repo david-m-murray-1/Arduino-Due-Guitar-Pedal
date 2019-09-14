@@ -1,10 +1,12 @@
 # Arduino-Due-Guitar-Pedal
 
-ARDUINO DUE 24-bit resolution guitar pedal.
+ARDUINO DUE 24-bit voltage resolution guitar pedal.
 Cirrus CS4271 I2S enabled audio codec. 
 48 kHz sampling rate.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
+
+Depending on which mode you have put the CS4271 audio codec in, it may require a 22MHz Crystal-not an 11MHz crystal
 
 To use this code, refer to: http://www.cloud-rocket.com/2014/05/programming-arduino-due-atmel-studio-asf/ to compile the sketch with its libraries.
 
