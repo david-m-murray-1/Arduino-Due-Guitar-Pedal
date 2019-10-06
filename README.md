@@ -6,6 +6,8 @@ Cirrus CS4271 I2S enabled audio codec.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
 
+https://stackoverflow.com/questions/18523577/how-to-program-arduino-with-c
+
 The codec is actually using 32-bits to transfer data, but only 24 of these bits define the voltage
 
 Depending on which mode you have put the CS4271 audio codec in, it may require a 22MHz Crystal-not an 11MHz crystal
