@@ -13,8 +13,9 @@ class Effect
 public:
   Effect(); // constructor for base class
   virtual ~Effect(); // destructor for base class
-  virtual void process_samples(float *inputbuffer,float *outputbuffer);
+  virtual void process_samples(float *inputbuffer,float *outputbuffer, int bufptr);
 private:
+  int bufptr;
   unsigned long framesperbuffer;
 };
 
