@@ -7,16 +7,14 @@
 
 class Distortion : public Effect
 {
-public:
-  void setTimbre(float timbre);
-  void setDepth(float depth);
-  void Distortion_process_samples(float *inputbuffer, float *outputbuffer);
-
+private:
   float timbre = 1;
   float timbreInverse;
   float depth = 1;
   int bypass = 1;
-
-private:
+public:
+  void setTimbre(float timbre);
+  void setDepth(float depth);
+  void Distortion_process_samples(float *inputbuffer, float *outputbuffer);
 
 }; // distortion
