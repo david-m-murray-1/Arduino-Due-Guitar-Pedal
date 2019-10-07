@@ -10,13 +10,13 @@
 
 class Effect
 {
+private:
+  volatile int bufptr;
+  unsigned long framesperbuffer;
 public:
   Effect(); // constructor for base class
   virtual ~Effect(); // destructor for base class
-  virtual void process_samples(float *inputbuffer,float *outputbuffer, int bufptr);
-private:
-  int bufptr;
-  unsigned long framesperbuffer;
+  virtual void process_samples(float *inputbuffer,float *outputbuffer, volatile int bufptr);
 };
 
 #endif // _EFFECT_H_
