@@ -69,11 +69,7 @@ int main(){
   STEREO stereo_right;
 
   Distortion Distortion;
-  Distortion.setDepth(1);
-  Distortion.setTimbre(1);
   RingModulator RingModulation;
-  RingModulation.setFc(440);
-  RingModulation.setFs(300);
   Tremolo Tremolo;
   Flanger Flanger;
 
