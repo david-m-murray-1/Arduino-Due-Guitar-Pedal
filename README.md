@@ -6,6 +6,8 @@ Cirrus CS4271 I2S enabled audio codec.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
 
+rework setup. Rework effects library
+
 add override to functions with the same foot print as virtual foot print
 
 Look for possible fixes with design patterns by gang of four.
