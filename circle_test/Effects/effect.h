@@ -17,7 +17,7 @@ public:
   Effect(); // constructor for base class
   virtual ~Effect(); // destructor for base class
   virtual void process_samples(float *inputbuffer,float *outputbuffer, bufptr);
-  void reset_bufptr() { bufptr = 0; }
+  void reset_bufptr();
 };
 
 #endif // _EFFECT_H_
