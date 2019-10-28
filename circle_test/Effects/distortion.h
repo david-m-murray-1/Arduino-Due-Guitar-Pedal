@@ -4,7 +4,7 @@
 #include <complex.h>
 #include <iostream>
 
-class Distortion
+class Distortion : Public Effect
 {
 public:
   void setTimbre(double timbre);
