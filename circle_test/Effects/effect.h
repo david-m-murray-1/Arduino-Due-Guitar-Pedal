@@ -16,6 +16,7 @@ public:
   virtual ~Effect(); // destructor for base class
   virtual void process_samples(float *inputbuffer,float *outputbuffer);
 private:
+  static int bufptr = 0;
   unsigned long framesperbuffer;
 };
 
