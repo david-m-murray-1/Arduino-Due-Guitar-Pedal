@@ -11,7 +11,7 @@
 
 class Effect
 {
-private:
+protected:
   static int bufptr = 0;
 public:
   Effect(); // constructor for base class
