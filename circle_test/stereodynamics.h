@@ -24,13 +24,13 @@ private:
 	double level = 10;
 	double bufptr;
 public:
-	double calc_rms_amplitude(double* outputbuffer, int bufptr, double rms_width, double rms_amplitude);
-	double calc_rms_dB(double rms_amplitude, double RMS_dB);
+	double calc_rms_amplitude(double  *outputbuffer, int bufptr, rms_width, rms_amplitude);
+	double calc_rms_dB(rms_amplitude, RMS_dB);
 	// positve comp slope
-	double calc_comp_scale(double comp_slope, double comp_threshold, double rms_dB);
+	double calc_comp_scale(comp_slope, comp_threshold, rms_dB);
 	// negative comp slope
-	double calc_exp_scale(double exp_slope, double exp_threshold, double rms_dB);
-	double calc_scaling_factor(double min_amplitude);
+	double calc_exp_scale(exp_slope, exp_threshold, rms_dB);
+	double calc_scaling_factor(min_amplitude);
 };
 
 #endif
