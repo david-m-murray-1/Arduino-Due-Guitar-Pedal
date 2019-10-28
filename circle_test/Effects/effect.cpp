@@ -17,3 +17,7 @@ void Effect::process_samples(float *inputbuffer,float *outputbuffer, int bufptr)
   for(int i=0; i<FRAMESPERBUFFER; i++) outputbuffer[i]=inputbuffer[i];
 }
 
+void reset_bufptr() {
+  bufptr = 0;
+}
+
