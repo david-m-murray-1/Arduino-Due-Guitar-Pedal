@@ -15,7 +15,7 @@ protected:
   static int bufptr = 0;
 public:
   Effect(); // constructor for base class
-  ~Effect(); // destructor for base class
+  virtual ~Effect(); // destructor for base class
   virtual void process_samples(float *inputbuffer,float *outputbuffer, bufptr);
   void reset_bufptr() { bufptr = 0; }
 };
