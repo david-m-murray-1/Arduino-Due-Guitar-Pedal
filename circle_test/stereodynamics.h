@@ -5,7 +5,7 @@
 #include <iostream>
 
 class STEREO {
-public:
+private:
 	double rms_amplitude = 0;
 	double rms_width = 0.1;
 	double rms_dB = 0;
@@ -23,7 +23,7 @@ public:
 	double gain;
 	double level = 10;
 	double bufptr;
-
+public:
 	double calc_rms_amplitude(double* outputbuffer, int bufptr, double rms_width, double rms_amplitude);
 	double calc_rms_dB(double rms_amplitude, double RMS_dB);
 	// positve comp slope
