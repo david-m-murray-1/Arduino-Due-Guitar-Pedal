@@ -3,6 +3,7 @@
 #include <math.h>
 #include <complex.h>
 #include <iostream>
+#include "Effect.h"
 
 class Distortion : Public Effect
 {
