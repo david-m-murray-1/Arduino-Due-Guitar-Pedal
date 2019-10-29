@@ -9,7 +9,7 @@
 
 #define SAMPLERATE 96000;
 
-class RingModulator
+class RingModulator: public Effect
 {
 public:
   void setFs(double Fs);
