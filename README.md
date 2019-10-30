@@ -10,8 +10,8 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   TODO   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
 
-testing multithreading for full test of all non-embedded code.
-testing ISRs for effect switching.  audio file in via serial input to arduino.  audio stream out via serial output to screen.  concurrently create mp3 audio file to test input vs effect to verify DSP algorithms.
+testing multithreading (using boost.thread to create a sleeping thread that throws a flag to the main thread whenever it is woken) for full test of all non-embedded code.  
+testing ISRs on breadboard for effect switching.  audio stream in via serial input to arduino.  audio stream out via serial output to screen.  thread to write to files.
 
 rework setup. Rework effects library
 
