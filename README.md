@@ -6,12 +6,17 @@ Cirrus CS4271 I2S enabled audio codec.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
 
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                                                          TODO
+
+testing multithreading for full test of all non-embedded code.
+testing ISRs for effect switching.  audio file in via serial input to arduino.  audio stream out via serial output to screen.  concurrently create mp3 audio file to test input vs effect to verify DSP algorithms.
+
 rework setup. Rework effects library
 
 add override to functions with the same foot print as virtual foot print
 
-Look for possible fixes with design patterns by gang of four.
-                        SOLID principles
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 https://stackoverflow.com/questions/18523577/how-to-program-arduino-with-c
 
