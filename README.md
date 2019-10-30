@@ -8,6 +8,8 @@ Circularly buffered.
 
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   TODO   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
+
+
 testing multithreading for full test of all non-embedded code.
 testing ISRs for effect switching.  audio file in via serial input to arduino.  audio stream out via serial output to screen.  concurrently create mp3 audio file to test input vs effect to verify DSP algorithms.
 
