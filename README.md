@@ -6,9 +6,13 @@ Cirrus CS4271 I2S enabled audio codec.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
 
+
+
+
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   TODO   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-
+Protothreading: TimedAction.h
+make a call to TimedAction in every loop to see if any work needs to be done.  loops will then run concurrently.
 
 testing multithreading (using boost.thread to create a sleeping thread that throws a flag to the main thread whenever it is woken) for full test of all non-embedded code.  
 testing ISRs on breadboard for effect switching.  audio stream in via serial input to arduino.  audio stream out via serial output to screen.  thread to write to files.
