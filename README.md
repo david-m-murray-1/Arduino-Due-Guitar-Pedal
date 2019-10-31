@@ -6,7 +6,14 @@ Cirrus CS4271 I2S enabled audio codec.
 Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (dB).
 Circularly buffered.
 
+is this more efficient with a mutex?
+https://theboostcpplibraries.com/boost.circularbuffer
 
+asynchronous fn's
+https://solarianprogrammer.com/2012/10/17/cpp-11-async-tutorial/
+
+boost::thread
+https://www.boost.org/doc/libs/1_66_0/doc/html/thread/synchronization.html#thread.synchronization.latches
 http://antonym.org/2009/05/threading-with-boost-part-i-creating-threads.html
 
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   TODO   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
