@@ -7,7 +7,7 @@ Dynamically scaled (RMS scaling dynamic range compression), logarithmic output (
 Circularly buffered.
 
 
-
+http://antonym.org/2009/05/threading-with-boost-part-i-creating-threads.html
 
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   TODO   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
