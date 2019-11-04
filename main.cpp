@@ -1,6 +1,6 @@
 /* ARDUINO DUE GUITAR PEDAL
  * DAVID MURRAY
- * Include .hpp and .cpp files used when compiling with Arduino IDE.
+ * Compiled in Atmel Studio 7
  */
 #include "pch.h"
 #include <iostream>
