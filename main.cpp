@@ -51,12 +51,12 @@ volatile int EFFECT;
 volatile int POT0, POT1;
 
 /////// Effects vars ///////////////////////////////////////////////////////////////////////////////
-  int left_buff_ptr = 0;
-  int right_buff_ptr = 0;
-  double inputbuffer_left[345];
-  double inputbuffer_right[345];
-  double outputbuffer_left[345];			EFFECTS
-  double outputbuffer_right[345];
+  static int left_buff_ptr = 0;
+  static int right_buff_ptr = 0;
+  static double inputbuffer_left[345];
+  static double inputbuffer_right[345];
+  static double outputbuffer_left[345];			EFFECTS
+  static double outputbuffer_right[345];
   double min_amplitude_left;
   double min_amplitude_right;	
   int bit_depth = 32;
