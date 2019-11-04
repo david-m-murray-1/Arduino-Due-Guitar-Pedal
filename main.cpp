@@ -67,7 +67,8 @@ int main(){
   ////////////////////////// INITIALIZE BUFFERS  ////////////////
   STEREO stereo_left;
   STEREO stereo_right;
-
+  
+  ////////////////////////// Instantiate Effect Objects ////////////////////////////
   Distortion Distortion;
   RingModulator RingModulation;
   Tremolo Tremolo;
