@@ -77,8 +77,8 @@ int main(){
   Flanger Flanger;
 
   //////////////////////////  init ring buffers  ////////////////
-  circular_buffer<double> circle_left(bit_depth);
-  circular_buffer<double> circle_right(bit_depth);
+  circular_buffer<double> circle_left(buffer_size);
+  circular_buffer<double> circle_right(buffer_size);
 		
   ////////////////////////// enable LED outputs  ////////////////
   PIOB->PIO_PER = PIO_PB25;  //Enable PIO_B
