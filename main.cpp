@@ -27,6 +27,8 @@
 #define LED4OFF (PIOC -> PIO_CODR = PIO_PC28)
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
 #define PWM_LRCK IOPORT_CREATE_PIN(PIOB, 27)
+#define SAMPLINGRATE 48000
+#define MAX_DELAY_TIME 1.5	// max delay time is 1.5 seconds
 
 codecTxReadyInterrupt(HiFiChannelID_t channel);
 codecRxReadyInterrupt(HiFiChannelID_t channel);
@@ -59,7 +61,7 @@ volatile int POT0, POT1;
   static double outputbuffer_right[345];
   double min_amplitude_left;
   double min_amplitude_right;	
-  int bit_depth = 32;
+  int buffer_size = SAMPLINGRATE * MAX_DELAY_TIME;  // the buffer must big enough to allow for the max delay time in an effect
  ////////////////////////////////////////////////////////////////////////////////////
 
 int main(){
@@ -91,28 +93,8 @@ int main(){
   ////////////////////////// External Interrupts ////////////////
   enable_NVIC_interrupts();
   
-  //////////////////////////  Left-Right Clock (LRCK)  //////////
-  pio_configure_pin(PWM_LRCK, PIO_TYPE_PIO_PERIPH_B);
-  pmc_enable_periph_clk(ID_PWM);
-  pwm_channel_disable(PWM, PWM_CHANNEL_0);
-   pwm_clock_t PWM_LRCK_clock_config = 
-  {
-	.ul_clka = 48000,                   // set to 48 kHz
-	.ul_clkb = 0,
-	.ul_mck = sysclk_get_cpu_hz()
-  }; 
-  
-  pwm_init(PWM, &PWM_LRCK_clock_config);
-	pwm_channel_instance.channel = PWM_CHANNEL_0;
-	pwm_channel_instance.ul_prescaler = PWM_CMR_CPRE_CLKA;
-	pwm_channel_instance.polarity = PWM_HIGH;
-	pwm_channel_instance.alignment = PWM_ALIGN_LEFT;
-	pwm_channel_instance.ul_period = 20;
-	pwm_channel_instance.ul_duty = 10;
-	//apply the channel configuration
-	pwm_channel_init(PWM, &pwm_channel_instance);
-	//configuration is complete, so enable the channel
-	pwm_channel_enable(PWM, PWM_CHANNEL_0);
+  //////////////////////////  LCD Screen to display effects  //////////
+
   
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
