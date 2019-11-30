@@ -26,7 +26,6 @@
 #define LED3OFF (PIOC -> PIO_CODR = PIO_PC26)
 #define LED4OFF (PIOC -> PIO_CODR = PIO_PC28)
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
-#define PWM_LRCK IOPORT_CREATE_PIN(PIOB, 27)
 #define SAMPLINGRATE 48000
 #define MAX_DELAY_TIME 1.5	// max delay time is 1.5 seconds
 
@@ -144,21 +143,14 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 			RingModulation.setFc(POT0);
 			RingModulation.setFs(POT1);
 			RingModulation.process_samples(&inputbuffer_left[0], &outputbuffer_right[0], left_buff_ptr);
-			RingModulation.process_samples(&inputbuffer_right[0], &outputbuffer_left[0], right_buff_ptr);
 			break;
 		case 3:
 			Tremolo.setRate(POT0);
 			Tremolo.setDepth(POT1);
 			Tremolo.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], left_buff_ptr);
-			Tremolo.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
 			break;
 		case 4:
 			Flanger.process_samples(&inputbuffer_left[0], &outputbuffer_left[0], left_buff_ptr);
-			Flanger.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
-			break;
-		case 5:																								//////////////////// BYPASS ////////////////////////
-			outputbuffer_left[left_buff_ptr] = inputbuffer_left[left_buff_ptr];
-			outputbuffer_right[right_buff_ptr] = inputbuffer_right[right_buff_ptr];
 			break;
 		default:
 			break;
@@ -185,32 +177,9 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 		} else {
 			stereo_left.gain = (1 - stereo_left.release) * stereo_left.gain + (stereo_left.release * stereo_left.calc_scaling_factor(min_amplitude));
 		}
-	  		stereo_left.calc_rms_amplitude(&outputbuffer_left[0], bufptr, stereo_left.rms_width, stereo_left.rms_amplitude);
-		
-		// stereo right
-	  	stereo_right.calc_rms_amplitude(&outputbuffer_right[0], right_buff_ptr, stereo_right.rms_width, stereo_right.rms_amplitude);
-		stereo_right.calc_rms_dB(stereo_right.rms_amplitude, stereo_right.rms_dB);
-		// positve comp slope
-		stereo_right.calc_comp_scale(stereo_right.comp_slope, stereo_right.comp_threshold, stereo_right.rms_dB);
-		// negative comp slope
-		stereo_right.calc_exp_scale(stereo_right.exp_slope, stereo_right.exp_threshold, stereo_right.rms_dB);
-		min_amplitude_right = *min_element(begin(outputbuffer_right), end(outputbuffer_right);;
-
-		if (stereo_right.calc_scaling_factor(min_amplitude_right) < stereo_right.gain) {
-			stereo_right.gain = (1 - stereo_right.attack) * stereo_right.gain + (stereo_right.attack * stereo_right.calc_scaling_factor(min_amplitude));
-		}
-		else {
-		stereo_right.gain = (1 - stereo_right.release) * stereo_right.gain + (stereo_right.release * stereo_right.calc_scaling_factor(min_amplitude));
-		}
-						   
-		outputbuffer_left[left_buff_ptr] = stereo_left.gain * outputbuffer_left[bufptr];
-		outputbuffer_right[right_buff_ptr] = stereo_right.gain * outputbuffer_right[bufptr];
-		circle_left.put_back(outputbuffer_right[left_buff_ptr]);	   
-		circle_right.put_back(outputbuffer_left[right_buff_ptr]);
-	  
-     		HiFi.write(circle_left.get()); //output next sample
-      		HiFi.write(circle_right.get()); //output next sample
-						   
+	  		stereo_left.calc_rms_amplitude(&outputbuffer_left[0], bufptr, stereo_left.rms_width, stereo_left.rms_amplitude);		
+		circle_left.put_back(stereo_left.gain * outputbuffer_left[left_buff_ptr]);	   
+     		HiFi.write(circle_left.get()); //output next sample						   
 	} else {
 		switch (Effect) {
 			case 1:
@@ -234,7 +203,21 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 			default:
 				break;
 		}
+		// stereo right
+	  	stereo_right.calc_rms_amplitude(&outputbuffer_right[0], right_buff_ptr, stereo_right.rms_width, stereo_right.rms_amplitude);
+		stereo_right.calc_rms_dB(stereo_right.rms_amplitude, stereo_right.rms_dB);
+		// positve comp slope
+		stereo_right.calc_comp_scale(stereo_right.comp_slope, stereo_right.comp_threshold, stereo_right.rms_dB);
+		// negative comp slope
+		stereo_right.calc_exp_scale(stereo_right.exp_slope, stereo_right.exp_threshold, stereo_right.rms_dB);
+		min_amplitude_right = *min_element(begin(outputbuffer_right), end(outputbuffer_right);;
 
+		if (stereo_right.calc_scaling_factor(min_amplitude_right) < stereo_right.gain) {
+			stereo_right.gain = (1 - stereo_right.attack) * stereo_right.gain + (stereo_right.attack * stereo_right.calc_scaling_factor(min_amplitude));
+		}
+		else {
+		stereo_right.gain = (1 - stereo_right.release) * stereo_right.gain + (stereo_right.release * stereo_right.calc_scaling_factor(min_amplitude));
+		}
 		circle_right.put_back(stereo_right.gain * outputbuffer_right[bufptr]);
 	        HiFi.write(circle_right.get()); //output next sample
 	}
