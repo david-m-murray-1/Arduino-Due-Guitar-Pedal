@@ -210,8 +210,36 @@ void codecTxReadyInterrupt(HiFiChannelID_t channel)
 	  
      		HiFi.write(circle_left.get()); //output next sample
       		HiFi.write(circle_right.get()); //output next sample
-}
+						   
+	} else {
+		switch (Effect) {
+			case 1:
+				Distortion.setDepth(POT0);
+				Distortion.setTimbre(POT1);
+				Distortion.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
+				break;
+			case 2:
+				RingModulation.setFc(POT0);
+				RingModulation.setFs(POT1);
+				RingModulation.process_samples(&inputbuffer_right[0], &outputbuffer_left[0], right_buff_ptr);
+				break;
+			case 3:
+				Tremolo.setRate(POT0);
+				Tremolo.setDepth(POT1);
+				Tremolo.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
+				break;
+			case 4:
+				Flanger.process_samples(&inputbuffer_right[0], &outputbuffer_right[0], right_buff_ptr);
+				break;
+			default:
+				break;
+		}
 
+		circle_right.put_back(stereo_right.gain * outputbuffer_right[bufptr]);
+	        HiFi.write(circle_right.get()); //output next sample
+	}
+}						   
+					 
 void codecRxReadyInterrupt(HiFiChannelID_t channel)
 {
   if (channel == HIFI_CHANNEL_ID_1)
