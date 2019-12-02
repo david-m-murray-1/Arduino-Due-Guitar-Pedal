@@ -13,14 +13,7 @@ void Distortion::setDepth(float depth){
 //processing samples
 void Distortion::Distortion_process_samples(float *inputbuffer, float *outputbuffer)
 {
-  if (bypass == 1) {
-    for(int bufptr=0; bufptr<FRAMESPERBUFFER; bufptr++) {
-      outputbuffer[bufptr] = inputbuffer[bufptr];
-    }
-  }
-  else {
     timbreInverse = (1 - (timbre * 0.099)) * 10; //inverse scaling from timbre
-    for(int bufptr=0; bufptr<FRAMESPERBUFFER; bufptr++) {
       inputbuffer[bufptr] = inputbuffer[bufptr] * depth;                               
       inputbuffer[bufptr] = tanh((inputbuffer[bufptr] * (timbre + 1)));                
       inputbuffer[bufptr] = (inputbuffer[bufptr] * ((0.1 + timbre) * timbreInverse));  
