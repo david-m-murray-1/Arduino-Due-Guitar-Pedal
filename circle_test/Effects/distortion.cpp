@@ -10,7 +10,7 @@ void Distortion::setDepth(double depth){
 }
 
 //processing samples
-double Distortion::process_samples(double *inputbuffer, double *outputbuffer, int bufptr, int mode)
+double Distortion::process_samples(double *inputbuffer, double *outputbuffer, int bufptr, distortion_mode)
 	switch(mode){
 		Case 1:	//linear_distortion
 			inputbuffer[bufptr] = inputbuffer[bufptr] * depth;
@@ -24,6 +24,10 @@ double Distortion::process_samples(double *inputbuffer, double *outputbuffer, in
 			break;
 		Case 2:	// Non-linear distortion
 			outputbuffer[bufptr] = (inputbuffer[bufptr]/fabs(inputbuffer[bufptr])) * (1-exp((alpha*(inputbuffer[bufptr]*inputbuffer[bufptr])/fabs(inputbuffer[bufptr]))));
-			break;			
+			break;	
+		Case 3: // Distortion mixed with original
+			outputbuffer[bufptr]+=inputbuffer[bufptr]
+			return outputbuffer[bufptr];
+			break;
 	}
 }
