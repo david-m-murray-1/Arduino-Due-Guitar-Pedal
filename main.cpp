@@ -28,6 +28,10 @@
 #define LED5OFF (PIOB -> PIO_CODR = PIO_PB25)
 #define SAMPLINGRATE 48000
 #define MAX_DELAY_TIME 1.5	// max delay time is 1.5 seconds
+#define MODE_DISTORTION 1
+#define MODE_RINGMODULATOR 2
+#define MODE_TREMOLO 3
+#define MODE_FLANGER 4
 
 codecTxReadyInterrupt(HiFiChannelID_t channel);
 codecRxReadyInterrupt(HiFiChannelID_t channel);
@@ -251,7 +255,7 @@ void int_DISTORTION(){
   LED2OFF;
   LED3OFF;
   LED4OFF;
-  EFFECT = 1;
+  EFFECT = MODE_DISTORTION;
   return EFFECT;
 }
 
@@ -260,7 +264,7 @@ void int_RingModulator(){
   LED2ON;
   LED3OFF;
   LED4OFF;
-  EFFECT = 2;
+  EFFECT = MODE_RINGMODULATOR;
   return EFFECT;
 }
 
@@ -269,7 +273,7 @@ void int_TREMOLO(){
   LED2OFF;
   LED3OFF;
   LED4ON;
-  EFFECT = 3;
+  EFFECT = MODE_TREMOLO;
   return EFFECT;
 }
 	
@@ -278,7 +282,7 @@ void int_Flanger(){
   LED2OFF;
   LED3ON;
   LED4OFF;
-  EFFECT = 4;
+  EFFECT = MODE_FLANGER;
   return EFFECT;
 }
 						  					   
