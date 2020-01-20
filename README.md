@@ -3,7 +3,7 @@
 ARDUINO DUE 24-bit voltage resolution guitar pedal.
 Cirrus CS4271 I2S enabled audio codec. 
 Digital Signal Processor (FPGA) for DSP work load.
-I2C OLED Mount to display power on and current effect selection.
+I2C OLED Mount to display power on mesage and current effect selection.
 48 kHz sampling rate.
 Dynamically scaled.
 
