@@ -19,4 +19,8 @@ Program the DSP in Verilog HDL.
 
 Research 32-bit FFT calculations in Verilog.
 
-Update schematic wtih DSP circuitry in Multisim.  Resize PCB in Eagle.
+Update schematic wtih DSP circuitry in Multisim.  
+
+Resize PCB in Eagle.  
+
+Get guitar jack foot print for Eagle.
