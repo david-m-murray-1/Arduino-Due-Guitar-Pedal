@@ -16,3 +16,11 @@ Set I2C OLED priority as highest level.  This is done so that the effect can be 
 Resize PCB in Eagle.  
 
 Get guitar jack foot print for Eagle.
+
+test more dft algorithms.  get calculation time. compare original time domain with fft->ifft time domain outputs in matlab.
+
+write cooley-tukey in matlab.
+
+create plots in matlab.
+
+apply c++ effects in z-domain. starting with simple delay effect and 90 degree phase shifter. compare to matlab effects and plot outputs. upload plots.
