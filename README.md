@@ -18,6 +18,7 @@ Resize PCB in Eagle.
 Get guitar jack foot print for Eagle.
 
 test more dft algorithms.  get calculation time. compare original time domain with fft->ifft time domain outputs in matlab.
+rework cooley-tukey scaling in fft. scale sdft output and rework isdft algorithm.
 
 write cooley-tukey in matlab.
 
