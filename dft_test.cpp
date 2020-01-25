@@ -15,7 +15,8 @@
 
 using namespace std;
 
-int bufptr = 1;
+extern double InputSignal_f32_1kHz_15kHz[1280];
+
 std::string current_working_directory()
 {
 	char* cwd = _getcwd(0, 0); // **** microsoft specific ****
@@ -26,60 +27,74 @@ std::string current_working_directory()
 }
 
 
-extern double InputSignal_f32_1kHz_15kHz[1280];
-
 const double PI = 3.141592653589793238460;
 typedef std::complex<double> Complex;
 typedef std::valarray<Complex> CArray;
 void fft(CArray &x);
 void ifft(CArray &x);
+void fft_conquer(CArray &x);
 
-int main() {
-	current_working_directory();
+int main(int argc, const char* argv[]) {
+	size_t bufptr = 1;
+	/*current_working_directory();
 	ofstream fs;
 	string filename = "InputSignal_data_320.csv";
 	fs.open(filename);
+	*/
+	complex<double> *dft_x = new complex<double>[1345];
+	complex<double> *conj_dft_x = new complex<double>[1345];
+	complex<double> *conj_sdft_x = new complex<double>[1345];
+	complex<double> *inputbuffer_complex = new complex<double>[1345];
+	complex<double> *ifft_data = new complex<double>[1345];
+	double *inputbuffer = new double[1345];
+	double *outputbuffer = new double[1345];
 
-	complex<double> dft_x[345];
-	complex<double> conj_dft_x[345];
-	complex<double> conj_sdft_x[345];
-	complex<double> inputbuffer_complex[345];
-	double inputbuffer[345];
-	double outputbuffer[345];
-	double data[320];
+
+	//double *data = new double[1320];
+
 
 	// Use double precision arithmetic and a 320-length DFT
-	static SlidingDFT<double, 100> sdft;
-	static SlidingDFT<double, 100> isdft;
+	static SlidingDFT<double, 320> sdft;
+	static SlidingDFT<double, 320> isdft;
 	circular_buffer<double> circle(345);
 
 	/*
 	for (int i = 0; i <= 320; i++) {
 		data[i] = InputSignal_f32_1kHz_15kHz[i];
 		data[i] = static_cast<double>(data[i]);
-		cout << data[i] << endl;
 		fs << data[i] << endl;
 	}
 	fs.close();
 	*/
-	while (bufptr < 1245) {
+	while (bufptr < 380) {
 		/* load data and update dft*/
+		cout << "index: " << bufptr << endl;
 		circle.put(InputSignal_f32_1kHz_15kHz[bufptr]);		// load buffer
 		inputbuffer[bufptr] = circle.get_head();
+		copy(inputbuffer, inputbuffer+bufptr, inputbuffer_complex);
+		cout << "complex input buffer: " << inputbuffer_complex[bufptr] << endl;
 		sdft.update(inputbuffer[bufptr]);
+
+		cout << "real: " << sdft.dft[bufptr].real() << endl;
+
+		CArray fft_data(inputbuffer_complex, 320);
+		CArray ifft_data_array(ifft_data, 320);
 		cout << "time domain original: " << inputbuffer[bufptr] << endl;
 		dft_x[bufptr] = sdft.dft[bufptr];
 		cout << "complex vector output: " << dft_x[bufptr] << endl;
 
-		inputbuffer_complex[bufptr] = inputbuffer[bufptr];
-		CArray fft_data(inputbuffer_complex, 320);
-		fft(fft_data);
+		fft_conquer(fft_data);
 		cout << "fft algorithm output" << fft_data[bufptr] << endl;
 
 
+		ifft_data_array[bufptr] = (dft_x[bufptr].real(), dft_x[bufptr].imag());
+		ifft(ifft_data_array);
 		ifft(fft_data);
-		cout << "time domain output" << fft_data[bufptr] << endl << endl;
+		cout << "time domain output of fft: " << fft_data[bufptr] << endl;
+		cout << "time domain output of sdft: " << ifft_data_array[bufptr] << endl;
 
+		cout << "time domain: fft: " << ifft_data_array[bufptr].real() * cos(ifft_data_array[bufptr].imag()) << endl;
+		cout << "time domain: sdft: " << fft_data[bufptr].real() * cos(fft_data[bufptr].imag()) << endl << endl;
 
 		//conj_isdft_x[bufptr] = conj(isdft.dft[bufptr]);
 		//cout << "time domain" << conj_isdft_x[bufptr] << endl;
@@ -149,10 +164,11 @@ void fft(CArray &x)
 			x[b] = t;
 		}
 	}
-	//// Normalize (This section make it not working correctly)
+	// Normalize (This section make it not working correctly)
 	Complex f = 1.0 / sqrt(N);
 	for (unsigned int i = 0; i < N; i++)
 		x[i] *= f;
+		
 }
 
 // inverse fft (in-place)
@@ -169,4 +185,26 @@ void ifft(CArray& x)
 
 	// scale the numbers
 	x /= x.size();
+}
+
+void fft_conquer(CArray& x)
+{
+	const size_t N = x.size();
+	if (N <= 1) return;
+
+	// divide
+	CArray even = x[std::slice(0, N / 2, 2)];
+	CArray  odd = x[std::slice(1, N / 2, 2)];
+
+	// conquer
+	fft(even);
+	fft(odd);
+
+	// combine
+	for (size_t k = 0; k < N / 2; ++k)
+	{
+		Complex t = std::polar(1.0, -2 * PI * k / N) * odd[k];
+		x[k] = even[k] + t;
+		x[k + N / 2] = even[k] - t;
+	}
 }
