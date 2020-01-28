@@ -9,6 +9,7 @@ private:
 	double phase = 0; // modulation phase index
 	double ModulationSignal_Frequency;
 	double samplerate;
+	double Depth;
 
 public:
 	Tremolo();
