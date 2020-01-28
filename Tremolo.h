@@ -14,8 +14,7 @@ public:
 	Tremolo();
 	~Tremolo();
 
-	Tremolo(double samplerate, double Depth, double) {
-		this->samplerate = samplerate;
+	Tremolo(double samplerate, double Depth, double ModulationSignal_Frequency) {
 		setModulationDepth(Depth);
 		setModulationFrequency(double ModulationSignal_Frequency);
 	}
