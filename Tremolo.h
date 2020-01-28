@@ -16,6 +16,7 @@ public:
 	~Tremolo();
 
 	Tremolo(double samplerate, double Depth, double ModulationSignal_Frequency) {
+		setSampleRate(samplerate);
 		setModulationDepth(Depth);
 		setModulationFrequency(double ModulationSignal_Frequency);
 	}
@@ -35,12 +36,16 @@ public:
 	void increment_phase() {
 		this->phase = this->phase + (2 * M_PI * this->ModulationSignal_Frequency / this->samplerate);
 	}
+	
+	void setSampleRate(double samplerate) {
+		this->samplerate = samplerate;
+	}
 
-	double setModulationDepth(double Depth) {
+	void setModulationDepth(double Depth) {
 		this->Depth = Depth;
 	}
 
-	double setModulationFrequency(double ModulationSignal_Frequency) {
+	void setModulationFrequency(double ModulationSignal_Frequency) {
 		this->ModulationSignal_Frequency = ModulationSignal_Frequency;
 	}
 };
