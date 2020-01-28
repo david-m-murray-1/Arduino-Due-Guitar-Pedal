@@ -28,7 +28,7 @@ public:
 	double ModSignal() {
 		increment_phase();
 		this->phase = this->phase % 2 * M_PI;
-		double Modded_signal = (1 - this->Depth) + this->Depth * (sin(this->phase * this->ModulationSignal_Frequency));
+		double Modded_signal = (1 - this->Depth) + this->Depth * (sin(this->phase));
 		return Modded_signal;
 	}
 
