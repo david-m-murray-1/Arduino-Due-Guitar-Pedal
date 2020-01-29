@@ -32,7 +32,7 @@
 #define MODE_RINGMODULATOR 2
 #define MODE_TREMOLO 3
 #define MODE_FLANGER 4
-
+#define I2C_SLAVE_ADDRESS 0x3C
 codecTxReadyInterrupt(HiFiChannelID_t channel);
 codecRxReadyInterrupt(HiFiChannelID_t channel);
 
@@ -51,6 +51,9 @@ typedef struct {
 } pwm_clock_t;  
   
 
+  
+
+
 volatile int EFFECT;
 
 volatile int POT0, POT1;
@@ -68,7 +71,22 @@ volatile int POT0, POT1;
  ////////////////////////////////////////////////////////////////////////////////////
 
 int main(){
-
+  //////////////////////////////////////////////////////////////////////////////////
+	                   /*     Enable I2C OLED       */
+  sysclk_init();
+  board_init();
+  /* Enable the peripheral clock for TWI */
+  pmc_enable_periph_clk(BOARD_ID_TWI_MASTER);
+  twi_master_init(BOARD_BASE_TWI_MASTER, I2C_SLAVE_ADDRESS);
+  /* Clear receipt buffer */
+  twi_read_byte();
+  /* Configure TWI interrupts */
+  NVIC_DisableIRQ(BOARD_TWI_IRQn);
+  NVIC_ClearPendingIRQ(BOARD_TWI_IRQn);
+  NVIC_SetPriority(BOARD_TWI_IRQn, 0);
+  NVIC_EnableIRQ(BOARD_TWI_IRQn);
+  twi_enable_interrupt(BOARD_BASE_TWI_MASTER, /*TWI_SR_SVACC*/);
+	
   ////////////////////////// INITIALIZE BUFFERS  ////////////////
   STEREO stereo_left;
   STEREO stereo_right;
@@ -286,7 +304,7 @@ void int_Flanger(){
   return EFFECT;
 }
 						  					   
-void enable_NVIC_interrupts(){
+void enable_NVIC_interrupts() {
 
   // PORT D NVIC
   pmc_enable_periph_clk(ID_PIOD);
