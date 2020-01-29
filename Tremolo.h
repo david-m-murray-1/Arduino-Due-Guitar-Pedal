@@ -3,6 +3,7 @@
 #define _TREMOLO_H_
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <math.h>
 
 class Tremolo {
 private:
@@ -28,14 +29,16 @@ public:
 
 	double ModSignal() {
 		increment_phase();
-		this->phase = fmod(this->phase, 2 * 3.14);
-		//this->phase = this->phase % (double)2 * (double)3.14;
+		this->phase = fmod(this->phase, 2 * M_PI);
 		double Modded_signal = (1 - this->Depth) + this->Depth * (sin(this->phase));
 		return Modded_signal;
 	}
 
 	void increment_phase() {
-		this->phase = this->phase + (2 * 3.14 * this->ModulationSignal_Frequency / this->samplerate);
+		this->phase = this->phase + (2 * M_PI * this->ModulationSignal_Frequency / this->samplerate);
+		if (this->phase > 3.14) {
+			this->phase = (-1)*this->phase;
+		}
 	}
 
 	void setSampleRate(double samplerate) {
