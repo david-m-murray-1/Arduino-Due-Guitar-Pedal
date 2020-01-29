@@ -50,7 +50,9 @@ typedef struct {
 	uint32_t ul_mck;
 } pwm_clock_t;  
   
-
+typedef struct {
+	
+} opt;
   
 
 
