@@ -297,7 +297,6 @@ void int_DISTORTION(){
   LED3OFF;
   LED4OFF;
   EFFECT = MODE_DISTORTION;
-  return EFFECT;
 }
 
 void int_RingModulator(){
@@ -306,7 +305,6 @@ void int_RingModulator(){
   LED3OFF;
   LED4OFF;
   EFFECT = MODE_RINGMODULATOR;
-  return EFFECT;
 }
 
 void int_TREMOLO(){
@@ -315,7 +313,6 @@ void int_TREMOLO(){
   LED3OFF;
   LED4ON;
   EFFECT = MODE_TREMOLO;
-  return EFFECT;
 }
 	
 void int_Flanger(){
@@ -324,7 +321,6 @@ void int_Flanger(){
   LED3ON;
   LED4OFF;
   EFFECT = MODE_FLANGER;
-  return EFFECT;
 }
 						  					   
 void enable_NVIC_interrupts() {
