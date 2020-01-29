@@ -58,17 +58,7 @@ volatile int EFFECT;
 
 volatile int POT0, POT1;
 
-/////// Effects vars ///////////////////////////////////////////////////////////////////////////////
-  static int left_buff_ptr = 0;
-  static int right_buff_ptr = 0;
-  static double inputbuffer_left[345];
-  static double inputbuffer_right[345];
-  static double outputbuffer_left[345];			EFFECTS
-  static double outputbuffer_right[345];
-  double min_amplitude_left;
-  double min_amplitude_right;	
-  int buffer_size = SAMPLINGRATE * MAX_DELAY_TIME;  // the buffer must big enough to allow for the max delay time in an effect
- ////////////////////////////////////////////////////////////////////////////////////
+
 
 int main(){
   //////////////////////////////////////////////////////////////////////////////////
@@ -86,17 +76,27 @@ int main(){
   NVIC_SetPriority(BOARD_TWI_IRQn, 0);
   NVIC_EnableIRQ(BOARD_TWI_IRQn);
   twi_enable_interrupt(BOARD_BASE_TWI_MASTER, /*TWI_SR_SVACC*/);
-	
-  ////////////////////////// INITIALIZE BUFFERS  ////////////////
-  STEREO stereo_left;
-  STEREO stereo_right;
   
+  ///////////////////////////////////////////////////////////////////////////////////
+	
+  static int left_buff_ptr = 0;
+  static int right_buff_ptr = 0;
+  static double inputbuffer_left[345];
+  static double inputbuffer_right[345];
+  static double outputbuffer_left[345];			EFFECTS
+  static double outputbuffer_right[345];
+  double min_amplitude_left;
+  double min_amplitude_right;	
+  int buffer_size = SAMPLINGRATE * MAX_DELAY_TIME;
+
   ////////////////////////// Instantiate Effect Objects ////////////////////////////
   Distortion Distortion;
   RingModulator RingModulation;
   Tremolo Tremolo;
   Flanger Flanger;
-
+  STEREO stereo_left;
+  STEREO stereo_right;
+	
   //////////////////////////  init ring buffers  ////////////////
   circular_buffer<double> circle_left(buffer_size);
   circular_buffer<double> circle_right(buffer_size);
@@ -111,11 +111,8 @@ int main(){
   PIOB->PIO_PUDR = PIO_PB25; //Disable the pull up resistor
   PIOC->PIO_PUDR = (PIO_PC24 | PIO_PC25 | PIO_PC26 | PIO_PC28); //Disable the pull up resistor
 
-  ////////////////////////// External Interrupts ////////////////
+  ////////////////////////// Enable External Interrupts ////////////////
   enable_NVIC_interrupts();
-  
-  //////////////////////////  LCD Screen to display effects  //////////
-
   
   ///////////////////////     I2S COMMUNICATION      //////////////////
   HiFi.begin();
@@ -143,12 +140,12 @@ int main(){
   ADC->ADC_CR= 0x02;         				// start adc conversion
   ADC->ADC_CHER = ADC_CHER_CH6; 			// adc channel 6 & 7
   ADC->ADC_CHER = ADC_CHER_CH7; 
-
-  ///////////////////////             MAIN            //////////////////
-while(1){
-  POT0=ADC->ADC_CDR[6];      // read effect parameters from POTs        
-  POT1=ADC->ADC_CDR[7];                   
-}
+  //////////////////////////////////////////////////////////////////////
+	
+  while(1) {
+  	POT0=ADC->ADC_CDR[6];      // read effect parameters from POTs        
+  	POT1=ADC->ADC_CDR[7];                   
+  }
 }
   
 void codecTxReadyInterrupt(HiFiChannelID_t channel)
