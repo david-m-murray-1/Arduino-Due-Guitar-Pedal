@@ -12,13 +12,13 @@ private:
 	double Depth;
 
 public:
-	Tremolo();
-	~Tremolo();
+	Tremolo() {};
+	~Tremolo() {};
 
 	Tremolo(double samplerate, double Depth, double ModulationSignal_Frequency) {
 		setSampleRate(samplerate);
 		setModulationDepth(Depth);
-		setModulationFrequency(double ModulationSignal_Frequency);
+		setModulationFrequency(ModulationSignal_Frequency);
 	}
 
 	double process_sample(double sample) {
@@ -28,15 +28,16 @@ public:
 
 	double ModSignal() {
 		increment_phase();
-		this->phase = this->phase % 2 * M_PI;
+		this->phase = fmod(this->phase, 2 * 3.14);
+		//this->phase = this->phase % (double)2 * (double)3.14;
 		double Modded_signal = (1 - this->Depth) + this->Depth * (sin(this->phase));
 		return Modded_signal;
 	}
 
 	void increment_phase() {
-		this->phase = this->phase + (2 * M_PI * this->ModulationSignal_Frequency / this->samplerate);
+		this->phase = this->phase + (2 * 3.14 * this->ModulationSignal_Frequency / this->samplerate);
 	}
-	
+
 	void setSampleRate(double samplerate) {
 		this->samplerate = samplerate;
 	}
