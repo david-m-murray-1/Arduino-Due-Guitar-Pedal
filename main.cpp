@@ -140,7 +140,31 @@ int main(){
   ADC->ADC_CR= 0x02;         				// start adc conversion
   ADC->ADC_CHER = ADC_CHER_CH6; 			// adc channel 6 & 7
   ADC->ADC_CHER = ADC_CHER_CH7; 
-  //////////////////////////////////////////////////////////////////////
+	
+  //////////////////////////  Left-Right Clock (LRCK)  //////////
+  pwm_channel_t pwm_channel_instance;
+
+  pio_configure_pin(PWM_LRCK, PIO_TYPE_PIO_PERIPH_B);
+  pmc_enable_periph_clk(ID_PWM);
+  pwm_channel_disable(PWM, PWM_CHANNEL_0);
+  pwm_clock_t PWM_LRCK_clock_config =  
+  	{
+	  .ul_clka = 96000,                   // set to 48 kHz
+       	  .ul_clkb = 0,
+	  .ul_mck = sysclk_get_cpu_hz()
+	};
+	
+  pwm_init(PWM, &PWM_LRCK_clock_config);
+  pwm_channel_instance.channel = PWM_CHANNEL_0;
+  pwm_channel_instance.ul_prescaler = PWM_CMR_CPRE_CLKA;
+  pwm_channel_instance.polarity = PWM_HIGH;
+  pwm_channel_instance.alignment = PWM_ALIGN_LEFT;
+  pwm_channel_instance.ul_period = 20;
+  pwm_channel_instance.ul_duty = 10;
+  //apply the channel configuration
+  pwm_channel_init(PWM, &pwm_channel_instance);
+  //configuration is complete, so enable the channel
+  pwm_channel_enable(PWM, PWM_CHANNEL_0);
 	
   while(1) {
   	POT0=ADC->ADC_CDR[6];      // read effect parameters from POTs        
