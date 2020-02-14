@@ -2,20 +2,6 @@
  * DAVID MURRAY
  * Compiled in Atmel Studio 7
  */
-#include "pch.h"
-#include <iostream>
-#include <cstdio>
-#include <asf.h>
-#include <HiFi.h>
-#include <ssc.h>
-#include <sstream>
-#include <vector>
-#include <stdlib.h>
-#include <algorithm>
-#include <iterator>
-#include "circle.h"
-#include "Effect.h"
-
 #define LED1ON (PIOC -> PIO_SODR = PIO_PC24)        // set output data register SODR
 #define LED2ON (PIOC -> PIO_SODR = PIO_PC25)
 #define LED3ON (PIOC -> PIO_SODR = PIO_PC26)     
@@ -33,6 +19,22 @@
 #define MODE_TREMOLO 3
 #define MODE_FLANGER 4
 #define I2C_SLAVE_ADDRESS 0x3C
+
+#include "pch.h"
+#include <iostream>
+#include <cstdio>
+#include <asf.h>
+#include <HiFi.h>
+#include <ssc.h>
+#include <sstream>
+#include <vector>
+#include <stdlib.h>
+#include <algorithm>
+#include <iterator>
+#include "circle.h"
+#include "Effect.h"
+
+
 codecTxReadyInterrupt(HiFiChannelID_t channel);
 codecRxReadyInterrupt(HiFiChannelID_t channel);
 
@@ -53,14 +55,10 @@ typedef struct {
 typedef struct {
 	
 } opt;
-  
-
 
 volatile int EFFECT;
 
 volatile int POT0, POT1;
-
-
 
 int main(){
   //////////////////////////////////////////////////////////////////////////////////
