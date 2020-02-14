@@ -51,10 +51,6 @@ typedef struct {
 	/** Frequency of master clock in Hz */
 	uint32_t ul_mck;
 } pwm_clock_t;  
-  
-typedef struct {
-	
-} opt;
 
 volatile int EFFECT;
 
@@ -63,11 +59,15 @@ volatile int POT0, POT1;
 int main(){
   //////////////////////////////////////////////////////////////////////////////////
 	                   /*     Enable I2C OLED       */
+  twi_options_t opt;
+  twi_master_options_t opt;
+  memset((void *)&opt, 0, sizeof(opt));
+	
   sysclk_init();
   board_init();
   /* Enable the peripheral clock for TWI */
   pmc_enable_periph_clk(BOARD_ID_TWI_MASTER);
-  twi_master_init(BOARD_BASE_TWI_MASTER, I2C_SLAVE_ADDRESS);
+  twi_master_init(BOARD_BASE_TWI_MASTER, &opt);
   /* Clear receipt buffer */
   twi_read_byte();
   /* Configure TWI interrupts */
